@@ -40,35 +40,113 @@ docs/                  // Technical documentation
 .github/               // CI configs, PR/issue templates
 ```
 
-## **Installation & Setup**
+## **Installation & Setup (Local)**
 
-1. Clone the repository:
-
+### 1. Clone the Repository
 ```bash
 git clone git@github.com:Windless-Technologies/presencepilot.git
 cd presencepilot
 ```
 
-2. Install dependencies:
-
+### 2. Install Dependencies
 ```bash
 npm install
 ```
 
-3. Copy environment file and configure secrets:
-
+### 3. Environment Setup
 ```bash
 cp .env.example .env.local
-# Edit .env.local with your credentials
 ```
+Then fill in:
+- `NEXTAUTH_SECRET`, `NEXTAUTH_URL`
+- `DATABASE_URL` (Postgres connection string)
+- Any API keys you're using
 
-4. Run the dev server:
+---
 
+## **PostgreSQL Setup (Mac – Homebrew)**
+
+1. **Install PostgreSQL**
 ```bash
-npm run dev
+brew install postgresql
 ```
 
-Open http://localhost:3000 in your browser.
+2. **Start Postgres Service**
+```bash
+brew services start postgresql
+```
+
+3. **Create the Database**
+```bash
+createdb presencepilot
+```
+
+4. **Set DATABASE_URL**
+In your `.env.local`:
+```bash
+DATABASE_URL=postgresql://localhost/presencepilot
+```
+
+5. **Run DB Migrations (if using Prisma or CLI-based tool)**
+```bash
+npx prisma migrate dev
+# OR
+npm run db:migrate
+```
+
+---
+
+## **Development Scripts**
+
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Run local dev server |
+| `npm run lint` | Run ESLint |
+| `npm run type-check` | TypeScript type check |
+| `npm run test:unit` | Run Jest unit tests |
+| `npm run test:e2e` | Run Cypress tests |
+| `npm run storybook` | Start Storybook |
+| `npm run build-storybook` | Build static Storybook |
+
+---
+
+## **Testing Locally**
+
+### Unit Tests
+```bash
+npm run test:unit
+```
+
+### E2E Tests (Cypress)
+1. Open the test UI:
+```bash
+npx cypress open
+```
+2. Or run headless:
+```bash
+npm run test:e2e
+```
+
+### Lint + Type Check
+```bash
+npm run lint
+npm run type-check
+```
+
+---
+
+## **Documentation**
+
+- [API Contract](docs/API_CONTRACT.md)
+- [Architecture](docs/TECH_DESIGN.md)
+- [Testing Strategy](docs/TESTING_STRATEGY.md)
+- [Security Guidelines](docs/SECURITY.md)
+- [Database Setup](docs/SETUP_DATABASE.md)
+- [UX Guidelines](docs/UX_GUIDELINES.md)
+- [Performance Notes](docs/PERFORMANCE_NOTES.md)
+- [Future Considerations](docs/FUTURE_CONSIDERATIONS.md)
+
+---
 
 ## **Core Features**
 
@@ -85,24 +163,31 @@ Open http://localhost:3000 in your browser.
 * **Accessibility:** `jest-axe`, `cypress-axe`
 * **Visual UI Testing:** Storybook Test Runner
 
-## **Docs & System Design**
+## **Documentation**
 
-* API Contract
-* Architecture
-* Testing Strategy
-* Security Guidelines
-* Database Setup
-* UX Guidelines
-* Performance Notes
-* Future Considerations
+- [API Contract](docs/API_CONTRACT.md)
+- [Architecture](docs/TECH_DESIGN.md)
+- [Testing Strategy](docs/TESTING_STRATEGY.md)
+- [Security Guidelines](docs/SECURITY.md)
+- [Database Setup](docs/SETUP_DATABASE.md)
+- [UX Guidelines](docs/UX_GUIDELINES.md)
+- [Performance Notes](docs/PERFORMANCE_NOTES.md)
+- [Future Considerations](docs/FUTURE_CONSIDERATIONS.md)
+
 
 ## **Contributing**
 
-1. Fork the repo and create a feature branch
-2. Follow the PR template
-3. Run pre-commit checks (`npm run lint`, `npm run test`)
-4. Submit a PR referencing the related issue
+1. Fork the repository and create a new feature branch.
+2. Follow all PR and issue templates.
+3. Run all checks before submitting:
+   ```bash
+   npm run lint
+   npm run type-check
+   npm test
+   ```
+4. Submit a pull request with a clear summary and linked issue.
 
+---
 ## **Live Deployment**
 
 Coming soon: https://presencepilot.co
