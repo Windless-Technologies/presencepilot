@@ -1,0 +1,8 @@
+# Set default reviewer for all code
+*       @Younique98
+
+# Optional: assign folders
+/src/pages/api/         @Younique98
+/src/components/        @Younique98
+/docs/                  @Younique98
+.github/workflows/      @Younique98

@@ -1,0 +1,41 @@
+name: Feature Request
+description: Propose a new feature or improvement.
+title: "[Feature]: "
+labels:
+  - feature
+  - P2 - Medium
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping us grow PresencePilot! Please provide context for your feature request.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or Opportunity
+      description: What problem are you trying to solve or improve?
+      placeholder: Describe the challenge or opportunity you're addressing.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Suggested Solution
+      description: How might we solve it? High-level logic or UI/UX notes.
+      placeholder: Describe the solution you'd propose.
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact
+      description: What would be the benefit of this feature? Who would it help?
+      placeholder: Describe who benefits and how.
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our Code of Conduct.
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
