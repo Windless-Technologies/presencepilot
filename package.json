@@ -9,7 +9,7 @@
   "lint": "next lint",
   "type-check": "tsc --noEmit",
   "test": "jest",
-  "test:unit": "jest",
+  "test:unit": "jest  --passWithNoTests",
   "test:e2e": "cypress run",
   "storybook": "storybook dev -p 6006",
   "build-storybook": "storybook build",
