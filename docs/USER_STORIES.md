@@ -36,7 +36,7 @@
 
 ## 👤 User Story 5: Intern Developer
 
-**As** a developer on the team  
+**As** an intern developer on the team  
 **I want to** clearly see the architecture, APIs, and what each feature does  
 **So that** I can work on one task without breaking another
 
