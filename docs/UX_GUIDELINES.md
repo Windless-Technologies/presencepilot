@@ -43,13 +43,13 @@ To define and enforce design consistency and accessible experiences across Prese
 
 ## Dark Mode
 
-Optional, but if implemented:
-- Follow Tailwind dark mode class strategy
-- Ensure contrast levels and theme toggling are preserved
-
----
+- Tailwind’s `dark:` strategy
+- Preserve contrast
+- Respect system preference when possible
 
 ## Motion
 
-- Keep animations subtle, fast (<200ms)
+- Keep animations subtle, fast
+    - Duration < 200ms
 - Use framer-motion for key transitions (e.g. modals)
+- Avoid distracting bounce/fade on form errors

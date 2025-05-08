@@ -1,13 +1,13 @@
 ## Goals
 
-Ensure dashboard loads quickly and performs well even with large datasets or slow networks.
+Ensure the dashboard remains performant on mobile, slow networks, and with high review/post volumes.
 
 ---
 
 ## Targets
 
-- First Contentful Paint: < 1.5s
-- Time to Interactive: < 3s
+- First Contentful Paint (FCP): < 1.5s
+- Time to Interactive (TTI): < 3s
 - API response time: < 300ms
 - Lighthouse score: 90+ across all categories
 
@@ -32,13 +32,27 @@ Ensure dashboard loads quickly and performs well even with large datasets or slo
 
 ## Frontend Optimization
 
-- TailwindCSS + PurgeCSS for small stylesheets
 - Reuse memoized components where list rendering is used
 - Use React.lazy for large dashboard modules
+- Lazy-load analytics, charts, modals
+- Use TailwindCSS + tree-shaking (PurgeCSS)
+- Compress assets via `next/image`
+- Minimize large third-party libraries
+- Paginate reviews and post lists
 
 ---
 
-## Monitoring
+## Backend/API Optimization
 
-- Add Vercel Analytics for front-end perf tracking
-- Add API request duration logs per endpoint
+- Cache responses from 3rd-party APIs (Yelp, Google)
+- Avoid N+1 queries via batch joins
+- Use indexes on `reviews.created_at`, `posts.status`
+- Stream long payloads when applicable
+
+---
+
+## Monitoring & Alerts
+
+- Enable Vercel Analytics
+- Log API duration to console + optionally to external service (e.g. Logflare)
+- Alert on failure rates > threshold (stretch goal)
