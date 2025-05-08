@@ -3,7 +3,18 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 const dbUrl = process.env.DATABASE_URL
-const dbName = dbUrl?.split('/').pop()
+// Extract database name using URL parsing
+let dbName: string | undefined
+if (dbUrl) {
+  try {
+    // Handle URLs with or without query parameters
+    const url = new URL(dbUrl)
+    dbName = url.pathname.split('/').pop()
+  } catch (e) {
+    console.error('❌ Invalid DATABASE_URL format')
+    process.exit(1)
+  }
+}
 
 if (!dbName) {
   console.error('❌ DATABASE_URL must end with a valid database name')
