@@ -1,7 +1,10 @@
+BEGIN;
+TRUNCATE TABLE reviews, posts, users RESTART IDENTITY CASCADE;
 -- Seed users
 INSERT INTO users (id, name, email, role, created_at) VALUES
-(gen_random_uuid(), 'Alice Smith', 'alice@example.com', 'admin', NOW()),
-(gen_random_uuid(), 'Bob Jones', 'bob@example.com', 'user', NOW());
+  (gen_random_uuid(), 'Alice Smith', 'alice@example.com', 'admin', NOW()),
+  (gen_random_uuid(), 'Bob Jones', 'bob@example.com', 'user', NOW());
+COMMIT;
 
 -- Seed reviews
 INSERT INTO reviews (id, user_id, platform, rating, content, responded, created_at) VALUES
