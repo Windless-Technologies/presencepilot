@@ -41,7 +41,7 @@ npx cypress open
 ```
 
 Test flows include:
-- Auth login → dashboard access
+- Auth login/ Google login → dashboard redirect
 - Review fetch → display → respond
 - Schedule → view → delete post
 
@@ -65,10 +65,14 @@ npm run test:unit
 
 ## Test Coverage
 
-Track coverage in CI for:
+- Track coverage % via `jest --coverage`
+- Smoke tests via Cypress for:
 - Unit tests
-- E2E smoke flows
-- a11y violations
+  - E2E smoke flows
+  - a11y violations
+  - Auth flow
+  - Dashboard loading
+  - Post scheduling
 
 ---
 
@@ -77,6 +81,6 @@ Track coverage in CI for:
 GitHub Actions runs:
 - Lint
 - Type-check
-- Unit tests
-- Cypress E2E smoke test
-- Build
+- Jest Unit tests
+- Cypress E2E (smoke test)
+- Build check (Next.js)

@@ -36,40 +36,59 @@ DATABASE_URL=postgresql://localhost/presencepilot
 
 ---
 
-## Table Structure (Simplified)
+## Table Structure (Minimum Viable)
 
 - `users`
-  - id
-  - name
-  - email
-  - role
-  - created_at
+  - `id` (uuid, primary key)
+  - `name`
+  - `email`
+  - `role` (enum: user, admin)
+  - `created_at` (timestamp)
 
 - `reviews`
-  - id
-  - platform
-  - rating
-  - content
-  - responded
-  - created_at
+  - `id`
+  - `user_id`
+  - `platform` (google, yelp)
+  - `rating`
+  - `content`
+  - `responded` (boolean)
+  - `created_at`
 
 - `posts`
-  - id
-  - content
-  - platform
-  - scheduled_time
-  - status
-  - created_at
+  - `id`
+  - `user_id`
+  - `content`
+  - `platform`
+  - `scheduled_time`
+  - `status` (enum: scheduled, posted, failed)
+  - `created_at`
 
 ---
 
 ## Seeding (Optional)
 
-Run SQL or script-based seeding (manual or with Prisma). You can create a `seed.sql` for test accounts and mock reviews.
+For local testing, you can use:
+
+```bash
+psql presencepilot < scripts/seed.sql
+```
+
+Or create a JS/TS script in `/scripts/seed.ts` with dummy data.
+
+---
+
+## Supabase Usage
+
+If you're using Supabase:
+
+- RLS (Row Level Security) must be enabled
+- Policies for authenticated reads/writes by user_id
+- Supabase Studio can be used to view or manually update records
 
 ---
 
 ## Notes
 
-- If using Supabase, enable RLS and assign appropriate policies for auth.
-- Keep schema synced with your ORM or SQL tool to avoid drift.
+- Schema should be source-controlled via `.sql` or Prisma schema
+- Do **not** commit real `.env.local` or actual secrets
+- Use `pgAdmin` or Supabase Studio for manual inspection/debugging

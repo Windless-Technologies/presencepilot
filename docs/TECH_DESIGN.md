@@ -60,15 +60,54 @@ docs/
 
 ---
 
-## Tradeoffs
+## Tech Stack Summary
 
-- Supabase makes things easier but can lock us in; fallback to raw Postgres supported
-- WebSockets over polling for better UX, but requires persistent connection infra
+| Layer      | Tool |
+|------------|------|
+| Frontend   | Next.js, TailwindCSS, React, TypeScript |
+| Backend    | Next.js API Routes, PostgreSQL, Supabase |
+| Auth       | NextAuth.js with Google OAuth |
+| CI/CD      | GitHub Actions, Vercel |
+| DB Admin   | Supabase Studio or pgAdmin |
+| Payments   | Stripe Checkout & Billing Portal |
+| Realtime   | WebSockets (Socket.io) |
+| Testing    | Jest, React Testing Library, Cypress, Storybook |
+| Monitoring | Vercel Analytics (default) |
+
+---
+
+## Security
+
+- Auth via **Google OAuth** with secure cookie sessions
+- Backend protected by **middleware that checks role + session**
+- All keys and secrets stored in **`.env.local`** and managed securely in Vercel
+- Stripe webhooks validated using signature
+- API endpoints rate-limited and access-checked
+
+---
+
+## Performance
+
+- All views use **lazy loading + skeleton loaders**
+- Post and review lists are **paginated**
+- Analytics queries use indexed fields
+- Uses **React.memo** and batching where needed
+
+---
+
+## Trade-offs & Risks
+
+- Supabase accelerates dev but can create long-term vendor lock-in
+- Facebook API permissions can be strict and brittle
+- Scaling WebSockets may require Redis or third-party pub/sub
+- Stripe webhook handling must be tested thoroughly in local + staging
 - All logic behind API Routes keeps deployment tight (Next + Vercel)
 
 ---
 
 ## Future Considerations
 
-- Move scheduler to background job queue (e.g., Bull or Vercel Cron)
+- Migrate social scheduling to a background job system (e.g., BullMQ or Vercel Cron)
 - Support multi-tenancy for multi-location brands
+- Add AI summarization of reviews
+- Cross-platform image post editor

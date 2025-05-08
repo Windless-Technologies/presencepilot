@@ -87,12 +87,25 @@ In your `.env.local`:
 DATABASE_URL=postgresql://localhost/presencepilot
 ```
 
-5. **Run DB Migrations (if using Prisma or CLI-based tool)**
+Then seed the database with dummy data:
+
 ```bash
-npx prisma migrate dev
-# OR
-npm run db:migrate
+ts-node scripts/seed.ts
 ```
+
+Or use the reset script to fully drop, create, and seed:
+
+```bash
+ts-node scripts/reset-db.ts
+```
+
+You can also use the raw SQL fallback:
+
+```bash
+psql presencepilot < scripts/seed.sql
+```
+
+> ⚠️ Make sure your `.env.local` has a valid `DATABASE_URL` pointing to your local PostgreSQL instance.
 
 ---
 
@@ -167,12 +180,16 @@ npm run type-check
 
 - [API Contract](docs/API_CONTRACT.md)
 - [Architecture](docs/TECH_DESIGN.md)
-- [Testing Strategy](docs/TESTING_STRATEGY.md)
-- [Security Guidelines](docs/SECURITY.md)
+- [Contributing](docs/CONTRIBUTING.md)
 - [Database Setup](docs/SETUP_DATABASE.md)
-- [UX Guidelines](docs/UX_GUIDELINES.md)
-- [Performance Notes](docs/PERFORMANCE_NOTES.md)
+- [Feature Brief](docs/FEATURE_BRIEF.md)
 - [Future Considerations](docs/FUTURE_CONSIDERATIONS.md)
+- [Performance Notes](docs/PERFORMANCE_NOTES.md)
+- [Security Guidelines](docs/SECURITY.md)
+- [Tech Design](docs/TECH_DESIGN.md)
+- [Testing Strategy](docs/TESTING_STRATEGY.md)
+- [User Stories](docs/USER_STORIES.md)
+- [UX Guidelines](docs/UX_GUIDELINES.md)
 
 
 ## **Contributing**
