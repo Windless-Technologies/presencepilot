@@ -69,11 +69,14 @@ DATABASE_URL=postgresql://localhost/presencepilot
 
 For local testing, you can use:
 
+# Fallback SQL
 ```bash
 psql presencepilot < scripts/seed.sql
 ```
 
-Or create a JS/TS script in `/scripts/seed.ts` with dummy data.
+# Recommended: run the TypeScript scripts
+npx ts-node scripts/seed.ts
+npx ts-node scripts/reset-db.ts
 
 ---
 
