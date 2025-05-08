@@ -1,4 +1,14 @@
 import { Client } from 'pg';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
+
+// Validate DATABASE_URL
+if (!process.env.DATABASE_URL) {
+  console.error('❌ DATABASE_URL environment variable is required');
+  process.exit(1);
+}
 
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
