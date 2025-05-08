@@ -11,7 +11,7 @@ if (dbUrl) {
     const url = new URL(dbUrl)
     dbName = url.pathname.split('/').pop()
   } catch (e) {
-    console.error('❌ Invalid DATABASE_URL format')
+    console.error('❌ Invalid DATABASE_URL format', e)
     process.exit(1)
   }
 }
@@ -21,17 +21,26 @@ if (!dbName) {
   process.exit(1)
 }
 
+// Validate DB name for safety (alphanumeric and underscores only)
+if (!/^[a-zA-Z0-9_]+$/.test(dbName)) {
+  console.error('❌ Database name contains invalid characters')
+  process.exit(1)
+}
+
 try {
   console.log(`🔄 Dropping database: ${dbName}`)
   execSync(`dropdb ${dbName}`, { stdio: 'inherit' })
+} catch {
+  console.log(`⚠️ Database ${dbName} doesn't exist, skipping drop`)
+}
 
+try {
   console.log(`🆕 Creating database: ${dbName}`)
   execSync(`createdb ${dbName}`, { stdio: 'inherit' })
 
   console.log(`🌱 Seeding database using SQL file`)
   execSync(`psql ${dbName} < scripts/seed.sql`, {
-    stdio: 'inherit',
-    shell: '/bin/sh'
+    stdio: 'inherit'
   })
 
   console.log('✅ Database reset complete')
