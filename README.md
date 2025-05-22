@@ -151,13 +151,16 @@ npm run type-check
 ## **Documentation**
 
 - [API Contract](docs/API_CONTRACT.md)
-- [Architecture](docs/TECH_DESIGN.md)
+- [Architecture & Tech Design](docs/TECH_DESIGN.md)
+- [Feature Brief](docs/FEATURE_BRIEF.md)
 - [Testing Strategy](docs/TESTING_STRATEGY.md)
 - [Security Guidelines](docs/SECURITY.md)
 - [Database Setup](docs/SETUP_DATABASE.md)
 - [UX Guidelines](docs/UX_GUIDELINES.md)
+- [User Stories](docs/USER_STORIES.md)
 - [Performance Notes](docs/PERFORMANCE_NOTES.md)
 - [Future Considerations](docs/FUTURE_CONSIDERATIONS.md)
+- [Contributing](docs/CONTRIBUTING.md)
 
 ---
 
@@ -175,21 +178,6 @@ npm run type-check
 * **E2E Tests:** `Cypress`
 * **Accessibility:** `jest-axe`, `cypress-axe`
 * **Visual UI Testing:** Storybook Test Runner
-
-## **Documentation**
-
-- [API Contract](docs/API_CONTRACT.md)
-- [Architecture](docs/TECH_DESIGN.md)
-- [Contributing](docs/CONTRIBUTING.md)
-- [Database Setup](docs/SETUP_DATABASE.md)
-- [Feature Brief](docs/FEATURE_BRIEF.md)
-- [Future Considerations](docs/FUTURE_CONSIDERATIONS.md)
-- [Performance Notes](docs/PERFORMANCE_NOTES.md)
-- [Security Guidelines](docs/SECURITY.md)
-- [Tech Design](docs/TECH_DESIGN.md)
-- [Testing Strategy](docs/TESTING_STRATEGY.md)
-- [User Stories](docs/USER_STORIES.md)
-- [UX Guidelines](docs/UX_GUIDELINES.md)
 
 
 ## **Contributing**
