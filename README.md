@@ -111,25 +111,25 @@ psql presencepilot < scripts/seed.sql
 
 ## **PostgreSQL Setup (Windows – Git Bash / PowerShell)**
 1. Install PostgreSQL
-Download and install PostgreSQL from https://www.postgresql.org/download/windows/
+Download and install PostgreSQL from <https://www.postgresql.org/download/windows/>
 The installer typically adds PostgreSQL’s bin folder to your system PATH.
 
 2. Start PostgreSQL
-PostgreSQL usually runs as a Windows service automatically.
-If needed, check by pressing Windows + R, typing services.msc, and starting PostgreSQL service.
+It usually runs as a Windows service automatically.
+If needed, open the Services console (Windows + R → services.msc) and start the PostgreSQL service.
 
 3. Create the Database
 Open Git Bash or PowerShell and run:
 
 ```bash
-createdb -U postgres presencepilot
-```
+createdb -h <host> -p <port> -U postgres presencepilot```
 ⚠️ If you see command not found, try the full path:
 
 ```bash
 "/c/Program Files/PostgreSQL/17/bin/createdb.exe" -U postgres presencepilot
 ```
-🔁 If you see database "presencepilot" already exists, you can skip this step.
+🔁 If you see the message `database "presencepilot" already exists`, you can skip this step.
+
 
 4. Set the DATABASE_URL
 Add this to .env.local file: 
@@ -147,13 +147,12 @@ Or reset (drop, create, seed):
 ```bash
 npx ts-node scripts/reset-db.ts
 ```
-If you get errors related to .ts Use the raw SQL fallback below
+If you get errors related to `.ts`, use the raw SQL fallback below.
 
 6. Seed Using Raw SQL (Fallback)
 If ts-node doesn't work, run:
 ```bash
 psql -U postgres -d presencepilot -f scripts/seed.sql
-```
 
 If psql is not recognized, use the full path:
 ```bash
@@ -161,34 +160,34 @@ If psql is not recognized, use the full path:
 ```
 
 --
-⚠️ Troubleshooting (Windows)
+⚠️ **Troubleshooting (Windows)**
 
-```createdb: command not found```
-
-Use the full path:
+- **`createdb: command not found`**  
+Use the full path (Git Bash):
 ```bash
-"/c/Program Files/PostgreSQL/17/bin/createdb.exe" -U postgres presencepilot
-ts-node or .ts file errors
+/c/Program\ Files/PostgreSQL/17/bin/createdb.exe -U postgres presencepilot
 ```
 
-Use npx:
+- **`ts-node` or `.ts` file errors**  
+Run via npx:
 ```bash
 npx ts-node scripts/reset-db.ts
 ```
 
--No tables after seeding?
-Run the SQL fallback:
+- **No tables after seeding?**  
+Use the SQL fallback:
 ```bash
 psql -U postgres -d presencepilot < scripts/seed.sql
 ```
 
--Open psql session
+- **Open psql session**  
 ```bash
 psql -U postgres -d presencepilot
 ```
 
--Exit psql
-```\q
+- **Exit psql**  
+```bash
+\q
 ```
 
 ## **Development Scripts**
