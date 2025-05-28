@@ -8,5 +8,15 @@ declare module 'next-auth' {
       name?: string
       image?: string
     } & DefaultSession['user']
+    accessToken: string
   }
 }
+
+declare module 'next-auth/jwt' {
+  interface JWT {
+    id: string
+    accessToken?: string
+  }
+}
+
+export {}
