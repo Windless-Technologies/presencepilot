@@ -2,7 +2,6 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import './Form.css'
 
 // Yup validation schema
 const schema = yup.object().shape({
@@ -22,8 +21,8 @@ interface IFormInput {
 export const Form: React.FC = () => {
   const {
     register,
-    handleSubmit
-    // formState: { errors, isValid },
+    handleSubmit,
+    formState: { errors, isValid }
   } = useForm<IFormInput>({
     resolver: yupResolver(schema),
     mode: 'onChange'
@@ -36,15 +35,21 @@ export const Form: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <label>Name</label>
+      <label> Business Name</label>
       <input {...register('businessname')} />
+      {errors.businessname && <p>{errors.businessname.message}</p>}
 
-      <label>Address</label>
+      <label>Category</label>
       <input {...register('category')} />
+      {errors.category && <p>{errors.category.message}</p>}
 
-      <label>Address</label>
+      <label>Location</label>
       <input {...register('location')} />
-      <input type="submit" />
+      {errors.location && <p>{errors.location.message}</p>}
+
+      <button type="submit" disabled={!isValid}>
+        Next
+      </button>
     </form>
   )
 }
