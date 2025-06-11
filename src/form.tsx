@@ -1,5 +1,7 @@
+'use client'
+
 import React from 'react'
-import { useForm } from 'react-hook-form'
+import * as hookForm from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
@@ -23,7 +25,7 @@ export const Form: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors, isValid }
-  } = useForm<IFormInput>({
+  } = hookForm.useForm<IFormInput>({
     resolver: yupResolver(schema),
     mode: 'onChange'
   })
