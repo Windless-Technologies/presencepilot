@@ -13,10 +13,20 @@ export default function AuthButton() {
         <div>
           <p>Hello {session.user?.name}</p>
           <p>Signed in as {session.user?.email}</p>
-          <button onClick={() => signOut()}>Sign out</button>
+          <button
+            className="bg-red-600 text-white font-bold py-2 px-4 rounded"
+            onClick={() => signOut()}
+          >
+            Sign out
+          </button>
         </div>
       ) : (
-        <button onClick={() => signIn('google')}>Sign in with Google</button>
+        <button
+          className="bg-green-500 text-white font-bold py-2 px-4 rounded"
+          onClick={() => signIn('google')}
+        >
+          Sign in with Google
+        </button>
       )}
     </>
   )
