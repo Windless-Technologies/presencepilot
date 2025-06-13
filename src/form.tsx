@@ -36,22 +36,55 @@ export const Form: React.FC = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <label> Business Name</label>
-      <input {...register('businessname')} />
-      {errors.businessname && <p>{errors.businessname.message}</p>}
+    <div>
+      {' '}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          {' '}
+          <label> Business Name</label>
+          <input {...register('businessname')} />
+          {errors.businessname && <p>{errors.businessname.message}</p>}
+        </div>
+        <br />
 
-      <label>Category</label>
-      <input {...register('category')} />
-      {errors.category && <p>{errors.category.message}</p>}
+        <div>
+          <label>Category</label>
+          <input {...register('category')} />
+          {errors.category && <p>{errors.category.message}</p>}
+        </div>
 
-      <label>Location</label>
-      <input {...register('location')} />
-      {errors.location && <p>{errors.location.message}</p>}
+        <br />
 
-      <button type="submit" disabled={!isValid}>
-        Next
-      </button>
-    </form>
+        <div>
+          <label>Location</label>
+          <input {...register('location')} />
+          {errors.location && <p>{errors.location.message}</p>}
+        </div>
+        <br />
+
+        <button type="submit" disabled={!isValid}>
+          Next
+        </button>
+      </form>
+      <br />
+      <br />
+      <div>
+        <h3>Connect</h3>
+        <button>Connect Facebook</button>
+        <br />
+        <button>Connect Google</button>
+        <br />
+        <button>Connect Instagram</button>
+      </div>
+      <br />
+      <br />
+      <div>
+        <h3>Set Preferences</h3>
+        <div>
+          <input type="checkbox" />
+          <label>Email Alerts</label>
+        </div>
+      </div>
+    </div>
   )
 }
