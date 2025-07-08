@@ -1,6 +1,5 @@
 import styles from '../../styles/login.module.css'
 import Image from 'next/image'
-import { GoogleLoginButton } from '../../components/button'
 
 export default function LoginPage() {
   return (
@@ -15,12 +14,30 @@ export default function LoginPage() {
       </div>
       <div className={styles.formSection}>
         <h1>Welcome Back to PresencePilot</h1>
+
         <form className={styles.form}>
-          <input type="email" placeholder="Email" required />
-          <input type="password" placeholder="Password" required />
-          <button type="submit">Login</button>
+          <button type="submit" className={styles.button}>
+            Continue with Google
+          </button>
+
+          <input
+            type="email"
+            placeholder="Email"
+            className={styles.input}
+            required
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            className={styles.input}
+            required
+          />
+
+          <button type="submit" className={styles.button}>
+            Login
+          </button>
         </form>
-        <GoogleLoginButton />
       </div>
     </div>
   )
