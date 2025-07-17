@@ -13,9 +13,11 @@ export default function LoginPage() {
         />
       </div>
       <div className={styles.formSection}>
-        <h1>Welcome Back to PresencePilot</h1>
-
         <form className={styles.form}>
+          <h1 className={styles.welcomeMessage}>
+            Welcome Back to PresencePilot
+          </h1>
+
           <button type="submit" className={styles.button}>
             Continue with Google
           </button>
