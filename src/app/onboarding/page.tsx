@@ -78,6 +78,30 @@ export default function OnboardingWizard() {
               Social Media Buttons later
             </div>
           </div>
+
+          {/* step 3 for now */}
+          <div className="mb-8">
+            <h2>Step 2: Connect Socials</h2>
+            <div className="text-gray-500 p-4 bg-gray-50 rounded">
+              Set Preferences
+            </div>
+          </div>
+
+          <div className="flex justify-between">
+            <button className="px-6 py-2 rounded-md font-medium transition-colors bg-gray-300 text-gray-500">
+              Previous
+            </button>
+            <button
+              disabled={!allStepsComplete}
+              className={`px-6 py-2 rounded-md font-medium transition-colors ${
+                allStepsComplete
+                  ? 'bg-green-500 text-white hover:bg-green-600'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
     </div>
