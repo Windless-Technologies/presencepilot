@@ -60,6 +60,25 @@ export default function OnboardingWizard() {
             </div>
           </div>
         </div>
+
+        {/*add actual steps in a whole white card thingy  */}
+        <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+          {/* step 1 for now */}
+          <div className="mb-8">
+            <h2>Step 1: Business Info</h2>
+            <div className="text-gray-500 p-4 bg-gray-50 rounded">
+              Business Form later
+            </div>
+          </div>
+
+          {/* step 2 for now */}
+          <div className="mb-8">
+            <h2>Step 2: Connect Socials</h2>
+            <div className="text-gray-500 p-4 bg-gray-50 rounded">
+              Social Media Buttons later
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )
