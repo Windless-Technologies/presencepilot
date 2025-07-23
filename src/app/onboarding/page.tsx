@@ -5,7 +5,8 @@ import React, { useState } from 'react'
 export default function OnboardingWizard() {
   // Steps 1 -3 states on top
 
-  const [completedSteps] = useState({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [completedSteps, setCompletedSteps] = useState({
     step1: false,
     step2: false,
     step3: false
@@ -81,7 +82,7 @@ export default function OnboardingWizard() {
 
           {/* step 3 for now */}
           <div className="mb-8">
-            <h2>Step 2: Connect Socials</h2>
+            <h2>Step 3: Preferences</h2>
             <div className="text-gray-500 p-4 bg-gray-50 rounded">
               Set Preferences
             </div>
