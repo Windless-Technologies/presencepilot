@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+
+.container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(224, 255, 204, 1);
+  font-family: 'Poppins', sans-serif;
+  
+}
+
+.loginIllustration {
+  flex: 1;
+  display: flex;
+.loginIllustration {
+  flex: 1;
+  display: flex;
+  width: 953.63px;
+  height: 800px;
+  justify-content: center;
+}
+  align-items: center;
+  background-color: #E0FFCC;
+  max-width: 50%;
+  padding: 2rem;
+  border: 1px solid rgba(229, 231, 235, 1);
+}
+
+
+.formSection {
+  flex: 1;
+  display: flex;
+  color: black;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background-color: rgba(229, 231, 235, 1);
+}
+
+.welcomeMessage {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 1rem; 
+}
+
+
+.formSection form {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.button {
+  width: 100%;
+  padding: 1rem;
+.button {
+  width: 100%;
+  padding: 1rem;
+  font-size: 14px;
+}
+  background-color: rgba(224, 255, 204, 1);
+  color: black;
+  font-weight: 400;
+  line-height: 100%;
+  border-radius: 0.5rem;
+  border: none;
+}
+
+.input {
+  width: 100%;
+  padding: 1rem;
+  height: 90px;
+  top: 881px;
+  background-color: rgba(229, 231, 235, 1);
+  left: 1431.32px;
+  color: rgba(148, 163, 184, 1);
+  font-weight: 400;
+  font-size: 14px;
+  border: 1px solid, rgba(207, 207, 212, 1);
+  border-radius: 0.5rem;
+  align-content: center;
+  box-sizing: border-box;
+  
+}
