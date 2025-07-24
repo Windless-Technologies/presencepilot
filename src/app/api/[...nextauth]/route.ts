@@ -9,7 +9,11 @@ const handler = NextAuth({
   },
   jwt: {
     maxAge: 7 * 24 * 60 * 60,
-    secret: process.env.NEXTAUTH_SECRET
+    secret:
+      process.env.NEXTAUTH_SECRET ||
+      (() => {
+        throw new Error('NEXTAUTH_SECRET environment variable is required')
+      })()
   },
 
   providers: [
@@ -21,16 +25,26 @@ const handler = NextAuth({
 
   callbacks: {
     async jwt({ token, account, user }) {
-      if (account) {
-        token.accessToken = account.access_token
-        token.id = user.id
+      try {
+        if (account) {
+          token.accessToken = account.access_token
+          token.id = user.id
+        }
+        return token
+      } catch (error) {
+        console.error('JWT callback error:', error)
+        return token
       }
-      return token
     },
     async session({ session, token }) {
-      session.accessToken = token.accessToken as string
-      session.user.id = token.id
-      return session
+      try {
+        session.accessToken = token.accessToken as string
+        session.user.id = token.id
+        return session
+      } catch (error) {
+        console.error('Session callback error:', error)
+        return session
+      }
     }
   }
 })
