@@ -14,11 +14,13 @@
 .loginIllustration {
   flex: 1;
   display: flex;
+.loginIllustration {
+  flex: 1;
+  display: flex;
   width: 953.63px;
   height: 800px;
-  top: 500px;
-  left: 158.94px;
   justify-content: center;
+}
   align-items: center;
   background-color: #E0FFCC;
   max-width: 50%;
