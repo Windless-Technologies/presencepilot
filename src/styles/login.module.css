@@ -56,9 +56,11 @@
 .button {
   width: 100%;
   padding: 1rem;
-  top: 696px;
-  left: 1430.44px;
+.button {
+  width: 100%;
+  padding: 1rem;
   font-size: 14px;
+}
   background-color: rgba(224, 255, 204, 1);
   color: black;
   font-weight: 400;
