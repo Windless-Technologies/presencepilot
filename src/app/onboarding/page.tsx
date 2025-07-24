@@ -19,6 +19,19 @@ export default function OnboardingWizard() {
   })
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    defaultValues: {
+      businessName: '',
+      category: '',
+      location: ''
+    }
+  })
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [completedSteps, setCompletedSteps] = useState({
     step1: false,
     step2: false,
