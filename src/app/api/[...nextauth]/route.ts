@@ -9,11 +9,7 @@ const handler = NextAuth({
   },
   jwt: {
     maxAge: 7 * 24 * 60 * 60,
-    secret:
-      process.env.NEXTAUTH_SECRET ||
-      (() => {
-        throw new Error('NEXTAUTH_SECRET environment variable is required')
-      })()
+    secret: process.env.NEXTAUTH_SECRET
   },
 
   providers: [
