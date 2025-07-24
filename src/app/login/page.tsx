@@ -6,7 +6,7 @@ export default function LoginPage() {
     <div className={styles.container}>
       <div className={styles.loginIllustration}>
         <Image
-          src="../images/login-illustration.svg"
+          src="/images/login-illustration.svg"
           alt="Login Illustration"
           width={953.63}
           height={500}
