@@ -1,9 +1,23 @@
 'use client'
 
 import React, { useState } from 'react'
+import { useForm } from 'react-hook-form'
 
 export default function OnboardingWizard() {
   // Steps 1 -3 states on top
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    defaultValues: {
+      businessName: '',
+      category: '',
+      location: ''
+    }
+  })
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [completedSteps, setCompletedSteps] = useState({
