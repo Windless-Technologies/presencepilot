@@ -6,11 +6,10 @@ import { useForm } from 'react-hook-form'
 export default function OnboardingWizard() {
   // Steps 1 -3 states on top
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const {
     register,
-    handleSubmit,
-    formState: { errors }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    handleSubmit
   } = useForm({
     defaultValues: {
       businessName: '',
@@ -76,19 +75,77 @@ export default function OnboardingWizard() {
           </div>
         </div>
 
-        {/*add actual steps in a whole white card thingy  */}
+        {/*Business Content Card*/}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
           {/* step 1 for now */}
           <div className="mb-8">
-            <h2>Step 1: Business Info</h2>
-            <div className="text-gray-500 p-4 bg-gray-50 rounded">
-              Business Form later
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+              Step 1: Business Info
+            </h2>
+            <div className="space-y-6">
+              {/* Business Name Input */}
+              <div>
+                <label
+                  htmlFor="businessName"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Business Name
+                </label>
+                <input
+                  {...register('businessName')}
+                  type="text"
+                  id="businessName"
+                  className="w-full p-2 border rounded placeholder:text-gray-600"
+                  placeholder="Enter your business name"
+                />
+              </div>
+
+              {/* Category Dropdown */}
+              <div>
+                <label
+                  htmlFor="category"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Category
+                </label>
+                <select
+                  {...register('category')}
+                  id="category"
+                  className="w-full p-2 border rounded placeholder:text-gray-600"
+                >
+                  <option value="">Select a category</option>
+                  <option value="restaurant">Restaurant</option>
+                  <option value="retail">Retail</option>
+                  <option value="services">Services</option>
+                  <option value="technology">Technology</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              {/* Location Input */}
+              <div>
+                <label
+                  htmlFor="location"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Location
+                </label>
+                <input
+                  {...register('location')}
+                  type="text"
+                  id="location"
+                  className="w-full p-2 border rounded placeholder:text-gray-600"
+                  placeholder="e.g., New York, NY"
+                />
+              </div>
             </div>
           </div>
 
           {/* step 2 for now */}
           <div className="mb-8">
-            <h2>Step 2: Connect Socials</h2>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+              Step 2: Connect Socials
+            </h2>
             <div className="text-gray-500 p-4 bg-gray-50 rounded">
               Social Media Buttons later
             </div>
@@ -96,7 +153,9 @@ export default function OnboardingWizard() {
 
           {/* step 3 for now */}
           <div className="mb-8">
-            <h2>Step 3: Preferences</h2>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+              Step 3: Preferences
+            </h2>
             <div className="text-gray-500 p-4 bg-gray-50 rounded">
               Set Preferences
             </div>
