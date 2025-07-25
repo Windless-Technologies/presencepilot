@@ -29,7 +29,8 @@
     "next-auth": "^4.24.11",
     "pg": "^8.15.6",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.61.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.6",
