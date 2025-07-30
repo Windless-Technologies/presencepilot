@@ -2,14 +2,13 @@
 
 import styles from '../../styles/login.module.css'
 
-export default function GoogleLoginButton() {
-  const handleGoogleLogin = () => {
-    // placeholder function for GOogle login
-    console.log('Google login clicked')
-  }
+type GoogleLoginButtonProps = {
+  onClick: () => void
+}
 
+export default function GoogleLoginButton({ onClick }: GoogleLoginButtonProps) {
   return (
-    <button className={styles.googleButton} onClick={handleGoogleLogin}>
+    <button type="button" className={styles.googleButton} onClick={onClick}>
       Sign in with Google
     </button>
   )
