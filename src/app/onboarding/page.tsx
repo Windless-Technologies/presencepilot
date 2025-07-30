@@ -108,7 +108,7 @@ export default function OnboardingWizard() {
                   {...register('businessName')}
                   type="text"
                   id="businessName"
-                  className="w-full p-2 border rounded placeholder:text-gray-600"
+                  className="w-full p-2 border rounded text-gray-900 placeholder:text-gray-400"
                   placeholder="Enter your business name"
                 />
               </div>
@@ -124,9 +124,11 @@ export default function OnboardingWizard() {
                 <select
                   {...register('category')}
                   id="category"
-                  className="w-full p-2 border rounded placeholder:text-gray-600"
+                  className="w-full p-2 border rounded text-gray-900"
                 >
-                  <option value="">Select a category</option>
+                  <option value="" className="text-gray-400">
+                    Select a category
+                  </option>
                   <option value="restaurant">Restaurant</option>
                   <option value="retail">Retail</option>
                   <option value="services">Services</option>
@@ -147,7 +149,7 @@ export default function OnboardingWizard() {
                   {...register('location')}
                   type="text"
                   id="location"
-                  className="w-full p-2 border rounded placeholder:text-gray-600"
+                  className="w-full p-2 border rounded text-gray-900"
                   placeholder="e.g., New York, NY"
                 />
               </div>
