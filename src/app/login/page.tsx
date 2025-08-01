@@ -23,7 +23,7 @@ export default function LoginPage() {
           <button
             type="button"
             className={styles.button}
-            onClick={() => signIn('google', { callbackUrl: '/onboarding' })}
+            onClick={() => signIn('google', { callbackUrl: '/home' })}
           >
             Continue with Google
           </button>
