@@ -11,6 +11,7 @@ export default function LoginPage() {
           alt="Login Illustration"
           width={953.63}
           height={500}
+          priority
         />
       </div>
       <div className={styles.formSection}>

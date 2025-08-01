@@ -8,7 +8,7 @@ type GoogleLoginButtonProps = {
 
 export default function GoogleLoginButton({ onClick }: GoogleLoginButtonProps) {
   return (
-    <button type="button" className={styles.googleButton} onClick={onClick}>
+    <button type="button" className={styles.button} onClick={onClick}>
       Sign in with Google
     </button>
   )
