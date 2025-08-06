@@ -1,5 +1,7 @@
+'use client'
 import styles from '../../styles/login.module.css'
 import Image from 'next/image'
+import { signIn } from 'next-auth/react'
 
 export default function LoginPage() {
   return (
@@ -18,7 +20,11 @@ export default function LoginPage() {
             Welcome Back to PresencePilot
           </h1>
 
-          <button type="submit" className={styles.button}>
+          <button
+            type="button"
+            className={styles.button}
+            onClick={() => signIn('google', { callbackUrl: '/home' })}
+          >
             Continue with Google
           </button>
 
