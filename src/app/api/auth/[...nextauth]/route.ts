@@ -1,7 +1,7 @@
-import NextAuth from 'next-auth'
+import NextAuth, { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 
-const handler = NextAuth({
+export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
     maxAge: 7 * 24 * 60 * 60,
@@ -43,6 +43,7 @@ const handler = NextAuth({
       }
     }
   }
-})
+}
 
+const handler = NextAuth(authOptions)
 export { handler as GET, handler as POST }
