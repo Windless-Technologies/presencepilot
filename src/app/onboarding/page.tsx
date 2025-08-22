@@ -1,16 +1,38 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+
+// Yup validation for step 1
+const step1Rules = yup.object({
+  businessName: yup
+    .string()
+    .required('Business name is required')
+    .min(2, 'Business name must be at least 2 characters'),
+  category: yup.string().required('Please select a category'),
+  location: yup
+    .string()
+    .required('Location is required')
+    .min(2, 'Location must be at least 2 characters')
+})
 
 export default function OnboardingWizard() {
-  // Steps 1 -3 states on top
+  const [completedSteps, setCompletedSteps] = useState({
+    step1: false,
+    step2: false,
+    step3: false
+  })
 
   const {
     register,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    handleSubmit
+    handleSubmit,
+    watch,
+    formState: { errors, isValid }
   } = useForm({
+    resolver: yupResolver(step1Rules),
     defaultValues: {
       businessName: '',
       category: '',
@@ -18,12 +40,33 @@ export default function OnboardingWizard() {
     }
   })
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [completedSteps, setCompletedSteps] = useState({
-    step1: false,
-    step2: false,
-    step3: false
-  })
+  const watchedValues = watch()
+
+  // Check if step 1 is complete whenever anything changes
+  useEffect(() => {
+    const isStep1Complete =
+      !!watchedValues.businessName?.trim() && // Has business name?
+      !!watchedValues.category && // Has category?
+      !!watchedValues.location?.trim() && // Has location?
+      isValid // Passes all Yup rules?
+
+    // Update our completion tracking
+    // Only update if the completion status actually changed
+    setCompletedSteps((prev) => {
+      if (prev.step1 !== isStep1Complete) {
+        return {
+          ...prev,
+          step1: isStep1Complete
+        }
+      }
+      return prev // Don't update if nothing changed
+    })
+  }, [
+    watchedValues.businessName,
+    watchedValues.category,
+    watchedValues.location,
+    isValid
+  ])
 
   // if all steps aka 3 parts of form are done then next button activate!
 
@@ -95,9 +138,14 @@ export default function OnboardingWizard() {
                   {...register('businessName')}
                   type="text"
                   id="businessName"
-                  className="w-full p-2 border rounded placeholder:text-gray-600"
+                  className="w-full p-2 border rounded text-gray-900 placeholder:text-gray-400"
                   placeholder="Enter your business name"
                 />
+                {errors.businessName && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.businessName.message}
+                  </p>
+                )}
               </div>
 
               {/* Category Dropdown */}
@@ -111,15 +159,22 @@ export default function OnboardingWizard() {
                 <select
                   {...register('category')}
                   id="category"
-                  className="w-full p-2 border rounded placeholder:text-gray-600"
+                  className="w-full p-2 border rounded text-gray-900"
                 >
-                  <option value="">Select a category</option>
+                  <option value="" className="text-gray-400">
+                    Select a category
+                  </option>
                   <option value="restaurant">Restaurant</option>
                   <option value="retail">Retail</option>
                   <option value="services">Services</option>
                   <option value="technology">Technology</option>
                   <option value="other">Other</option>
                 </select>
+                {errors.category && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.category.message}
+                  </p>
+                )}
               </div>
 
               {/* Location Input */}
@@ -134,9 +189,14 @@ export default function OnboardingWizard() {
                   {...register('location')}
                   type="text"
                   id="location"
-                  className="w-full p-2 border rounded placeholder:text-gray-600"
+                  className="w-full p-2 border rounded text-gray-900 placeholder:text-gray-400"
                   placeholder="e.g., New York, NY"
                 />
+                {errors.location && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.location.message}
+                  </p>
+                )}
               </div>
             </div>
           </div>
