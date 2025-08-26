@@ -1,7 +1,7 @@
 'use client'
 import styles from '../../styles/login.module.css'
 import Image from 'next/image'
-import { signIn } from 'next-auth/react'
+import LoginForm from '@/components/LoginForm'
 
 export default function LoginPage() {
   return (
@@ -12,40 +12,11 @@ export default function LoginPage() {
           alt="Login Illustration"
           width={953.63}
           height={500}
+          priority
         />
       </div>
       <div className={styles.formSection}>
-        <form className={styles.form}>
-          <h1 className={styles.welcomeMessage}>
-            Welcome Back to PresencePilot
-          </h1>
-
-          <button
-            type="button"
-            className={styles.button}
-            onClick={() => signIn('google', { callbackUrl: '/home' })}
-          >
-            Continue with Google
-          </button>
-
-          <input
-            type="email"
-            placeholder="Email"
-            className={styles.input}
-            required
-          />
-
-          <input
-            type="password"
-            placeholder="Password"
-            className={styles.input}
-            required
-          />
-
-          <button type="submit" className={styles.button}>
-            Login
-          </button>
-        </form>
+        <LoginForm />
       </div>
     </div>
   )
