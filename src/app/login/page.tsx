@@ -1,3 +1,4 @@
+'use client'
 import styles from '../../styles/login.module.css'
 import Image from 'next/image'
 import LoginForm from '@/components/LoginForm'

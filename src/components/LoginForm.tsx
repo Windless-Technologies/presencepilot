@@ -1,11 +1,12 @@
 'use client'
+import { signIn } from 'next-auth/react'
 
 import styles from '../styles/login.module.css'
 import GoogleLoginButton from './button/GoogleLoginButton'
 
 export default function LoginForm() {
   const handleGoogleLogin = () => {
-    console.log('Google login clicked')
+    signIn('google', { callbackUrl: '/home' })
   }
 
   return (
