@@ -72,7 +72,7 @@ docs/
 | Payments   | Stripe Checkout & Billing Portal |
 | Realtime   | WebSockets (Socket.io) |
 | Testing    | Jest, React Testing Library, Cypress, Storybook |
-| Monitoring | Vercel Analytics (default) |
+| Monitoring | Vercel Analytics (default); Sentry for server errors, production only (`src/instrumentation.ts`, scrubbed by `src/lib/sentry-scrub.ts`) |
 
 ---
 
