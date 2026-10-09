@@ -1,54 +1,54 @@
-import { execSync } from 'child_process'
+import { execFileSync } from 'child_process'
 import dotenv from 'dotenv'
+import { localDatabase } from './local-database'
 dotenv.config()
 
-const dbUrl = process.env.DATABASE_URL
-// Extract database name using URL parsing
-let dbName: string | undefined
-if (dbUrl) {
-  try {
-    // Handle URLs with or without query parameters
-    const url = new URL(dbUrl)
-    dbName = url.pathname.split('/').pop()
-  } catch (e) {
-    console.error('❌ Invalid DATABASE_URL format', e)
-    process.exit(1)
-  }
-}
-
-if (!dbName) {
-  console.error('❌ DATABASE_URL must end with a valid database name')
+// Drops, recreates and seeds the local database named by DATABASE_URL.
+// Every command runs without a shell and takes its values as separate
+// arguments, so nothing in DATABASE_URL can become a command.
+let db
+try {
+  db = localDatabase(process.env.DATABASE_URL)
+} catch (e) {
+  console.error(`❌ ${e instanceof Error ? e.message : 'Invalid DATABASE_URL'}`)
   process.exit(1)
 }
 
-// Validate DB name for safety (alphanumeric and underscores only)
-if (!/^[a-zA-Z0-9_]+$/.test(dbName)) {
-  console.error('❌ Database name contains invalid characters')
-  process.exit(1)
-}
+// A password in DATABASE_URL reaches the tools through the environment,
+// never the command line, where other users of the machine could read it.
+const password = new URL(process.env.DATABASE_URL!).password
+const env = password
+  ? { ...process.env, PGPASSWORD: decodeURIComponent(password) }
+  : process.env
+const run = (command: string, args: string[]) =>
+  execFileSync(command, [...db.args, ...args], { stdio: 'inherit', env })
 
 try {
-  console.log(`🔄 Dropping database: ${dbName}`)
-  execSync(`dropdb ${dbName}`, { stdio: 'inherit' })
+  console.log(`🔄 Dropping database: ${db.name}`)
+  run('dropdb', ['--if-exists', db.name])
 } catch {
-  console.log(`⚠️ Database ${dbName} doesn't exist, skipping drop`)
+  console.log(`⚠️ Could not drop ${db.name}, continuing`)
 }
 
 try {
-  console.log(`🆕 Creating database: ${dbName}`)
-  execSync(`createdb ${dbName}`, { stdio: 'inherit' })
+  console.log(`🆕 Creating database: ${db.name}`)
+  run('createdb', [db.name])
 
   console.log(`🌱 Seeding database using SQL file`)
-  execSync(`psql ${dbName} < scripts/seed.sql`, {
-    stdio: 'inherit'
-  })
+  run('psql', [
+    '--set',
+    'ON_ERROR_STOP=1',
+    '--file',
+    'scripts/seed.sql',
+    db.name
+  ])
 
   console.log('✅ Database reset complete')
 } catch (error: unknown) {
   if (error instanceof Error) {
     console.error('❌ Failed to reset database:', error.message)
   } else {
-    console.error('❌ Unknown error during reset:', error)
+    console.error('❌ Unknown error during reset')
   }
   process.exit(1)
 }

@@ -66,6 +66,8 @@ Then fill in:
 
 ## **PostgreSQL Setup (Mac – Homebrew)**
 
+> **In progress:** the app does not use a database yet, and the schema is not in the repository. `scripts/seed.sql` and `scripts/seed.ts` expect `users`, `reviews` and `posts` tables (described in [Database Setup](docs/SETUP_DATABASE.md)) that you create by hand for now. The seed and reset scripts only run against a database on your own machine and refuse a remote `DATABASE_URL`.
+
 1. **Install PostgreSQL**
 ```bash
 brew install postgresql
