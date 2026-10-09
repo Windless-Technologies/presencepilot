@@ -1,33 +1,32 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-
+/* Login page. Poppins is served from this site (src/app/layout.tsx), not
+   from Google Fonts: a stylesheet import from fonts.googleapis.com sent every
+   visitor's address to Google and would be refused by a Content Security
+   Policy that lists only this site. */
 
 .container {
   display: flex;
   flex-direction: row;
-  height: 100vh;
-  width: 100vw;
+  min-height: 100vh;
+  width: 100%;
   background-color: rgba(224, 255, 204, 1);
-  font-family: 'Poppins', sans-serif;
-  
+  font-family: var(--font-poppins), sans-serif;
 }
 
 .loginIllustration {
   flex: 1;
   display: flex;
-.loginIllustration {
-  flex: 1;
-  display: flex;
-  width: 953.63px;
-  height: 800px;
   justify-content: center;
-}
   align-items: center;
-  background-color: #E0FFCC;
+  background-color: #e0ffcc;
   max-width: 50%;
   padding: 2rem;
   border: 1px solid rgba(229, 231, 235, 1);
 }
 
+.loginIllustration img {
+  max-width: 100%;
+  height: auto;
+}
 
 .formSection {
   flex: 1;
@@ -43,9 +42,8 @@
 .welcomeMessage {
   width: 100%;
   text-align: left;
-  margin-bottom: 1rem; 
+  margin-bottom: 1rem;
 }
-
 
 .formSection form {
   width: 100%;
@@ -57,6 +55,7 @@
 
 .button {
   width: 100%;
+  min-height: 44px;
   padding: 1rem;
   font-size: 14px;
   background-color: rgba(224, 255, 204, 1);
@@ -67,20 +66,35 @@
   border: none;
 }
 
-
 .input {
   width: 100%;
   padding: 1rem;
   height: 90px;
-  top: 881px;
   background-color: rgba(229, 231, 235, 1);
-  left: 1431.32px;
-  color: rgba(148, 163, 184, 1);
+  /* #1f2937 on #e5e7eb is 12.6 to 1; the earlier #94a3b8 was 2.1 to 1. */
+  color: #1f2937;
   font-weight: 400;
   font-size: 14px;
-  border: 1px solid, rgba(207, 207, 212, 1);
+  border: 1px solid rgba(107, 114, 128, 1);
   border-radius: 0.5rem;
   align-content: center;
   box-sizing: border-box;
-  
+}
+
+.input::placeholder {
+  /* 5.4 to 1 on the input background. */
+  color: #4b5563;
+}
+
+/* Phones: the illustration sits above the form instead of beside it, so
+   nothing is wider than the screen. */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .loginIllustration {
+    max-width: 100%;
+    padding: 1rem;
+  }
 }

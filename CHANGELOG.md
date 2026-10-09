@@ -6,6 +6,18 @@ Every pull request adds its entry under `Unreleased`. At release time, `Unreleas
 
 ## [Unreleased]
 
+### Added (accessibility)
+- Every page is scanned by axe-core through Playwright on every pull request, with the WCAG 2.1 A and AA and WCAG 2.2 AA tags passed explicitly, at desktop and phone widths, against a production build (`npm run test:a11y`, `tests/a11y/pages.spec.ts`). The scan also fails a page that is wider than a phone screen
+
+### Fixed (accessibility)
+- The homepage was the create-next-app starter, with no heading and links to Vercel's marketing pages. It now says what PresencePilot is and what is in development, with a link to sign in
+- The page title was "Create Next App"; it is now "PresencePilot"
+- The email and password fields on the login page had 2.1 to 1 text contrast; they now have 12.6 to 1, with a visible border. On phones the illustration sits above the form instead of squeezing beside it
+- Onboarding text, step labels and the Previous button were below 4.5 to 1 contrast on their backgrounds; the green Next button and completed-step badge were 2.3 to 1 with white text. All now pass
+
+### Changed (fonts)
+- Fonts are served from this site. Geist comes from the `geist` package instead of `next/font/google`, which fetched it from Google at build time, and the login page's Poppins is vendored from Fontsource (SIL Open Font License, `src/fonts/`) instead of a stylesheet import from Google Fonts that sent every visitor's address to Google
+
 ### Added (monitoring and privacy records)
 - `docs/DATA_INVENTORY.md` records what personal data PresencePilot handles today (Google sign-in in an encrypted session cookie, scrubbed Sentry error reports), what is collected only in the browser and never sent (the onboarding wizard, the placeholder email and password fields), every processor (Google, Sentry, and Vercel once deployed), the sign-in cookies, and how privacy requests are answered. The legal entity that operates PresencePilot is marked for confirmation
 - A test pins what `src/instrumentation.ts` gives Sentry: reports only from production with `SENTRY_DSN` set (a blank value counts as unset), `sendDefaultPii` off, no tracing or breadcrumbs, every event scrubbed, and `onRequestError` wired. The Sentry setup itself already matched the engineering standards' monitoring template and is unchanged

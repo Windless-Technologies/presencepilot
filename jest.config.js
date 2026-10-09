@@ -4,5 +4,6 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  testPathIgnorePatterns: ['/node_modules/', '/.next/']
+  // tests/ holds the Playwright browser suites (`npm run test:a11y`).
+  testPathIgnorePatterns: ['/node_modules/', '/.next/', '<rootDir>/tests/']
 }

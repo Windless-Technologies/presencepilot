@@ -76,8 +76,8 @@ export default function OnboardingWizard() {
   return (
     <div className="min-h-screen bg-green-200 py-8">
       <div className="max-w-4xl mx-auto px-6">
-        <h1 className="text-gray-500">Onboarding Wizard</h1>
-        <p className="text-gray-500">
+        <h1 className="text-gray-800">Onboarding Wizard</h1>
+        <p className="text-gray-800">
           Steps complete: {allStepsComplete ? 'All done!' : 'In progress'}
         </p>
 
@@ -87,33 +87,33 @@ export default function OnboardingWizard() {
             <div className="flex items-center">
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
-                ${completedSteps.step1 ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}`}
+                ${completedSteps.step1 ? 'bg-green-700 text-white' : 'bg-gray-300 text-gray-600'}`}
               >
                 1
               </div>
-              <span className="ml-2 text-sm text-gray-500">Business Info</span>
+              <span className="ml-2 text-sm text-gray-800">Business Info</span>
             </div>
 
             {/* Step 2 */}
             <div className="flex items-center">
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
-                ${completedSteps.step2 ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}`}
+                ${completedSteps.step2 ? 'bg-green-700 text-white' : 'bg-gray-300 text-gray-600'}`}
               >
                 2
               </div>
-              <span className="ml-2 text-sm text-gray-500">Connect</span>
+              <span className="ml-2 text-sm text-gray-800">Connect</span>
             </div>
 
             {/* Step 3 */}
             <div className="flex items-center">
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
-                ${completedSteps.step3 ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}`}
+                ${completedSteps.step3 ? 'bg-green-700 text-white' : 'bg-gray-300 text-gray-600'}`}
               >
                 3
               </div>
-              <span className="ml-2 text-sm text-gray-500">Preferences</span>
+              <span className="ml-2 text-sm text-gray-800">Preferences</span>
             </div>
           </div>
         </div>
@@ -222,14 +222,14 @@ export default function OnboardingWizard() {
           </div>
 
           <div className="flex justify-between">
-            <button className="px-6 py-2 rounded-md font-medium transition-colors bg-gray-300 text-gray-500">
+            <button className="px-6 py-2 rounded-md font-medium transition-colors bg-gray-300 text-gray-800">
               Previous
             </button>
             <button
               disabled={!allStepsComplete}
               className={`px-6 py-2 rounded-md font-medium transition-colors ${
                 allStepsComplete
-                  ? 'bg-green-500 text-white hover:bg-green-600'
+                  ? 'bg-green-700 text-white hover:bg-green-800'
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
               }`}
             >

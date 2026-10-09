@@ -25,9 +25,10 @@
 - [ ] `npm run lint`: Lint
 - [ ] `npx tsc --noEmit`: Typecheck
 - [ ] `npm test`: Unit tests
+- [ ] `npm run test:a11y`: Accessibility scan of every page, desktop and phone, against a production build
 - [ ] `npm run build`: Production build
 - [ ] `npm audit --omit=dev --audit-level=low`: No known vulnerabilities in production dependencies
-- [ ] New behavior has a test; a bug fix has the test that would have caught it; a security fix has a test that attempts the attack
+- [ ] New behavior has a test; a bug fix has the test that would have caught it; a security fix has a test that attempts the attack; new pages are in `tests/a11y/pages.spec.ts`
 - [ ] Clicked through the change in a running build, in Chrome and Firefox, and at phone width
 
 ## Screenshots
