@@ -40,7 +40,7 @@ The secret scan and Semgrep need `trufflehog` and `semgrep` installed locally (`
 - Commit secrets or real `.env` files, or ask for a key to be pasted into chat. Keys go straight into the Vercel project's environment variables
 - Put a credential-shaped sample (a database URL with a user and password) in `.env.example`, a test or a document. Describe the value in words
 - Collect personal data the product does not need
-- Accept a form submission without a Vercel BotID check (`isConfirmedHuman()`), or let it pass when the check fails
+- Accept a form submission without a Vercel BotID check (`isConfirmedHuman()` from `src/lib/bot.ts`, with the path listed in `src/instrumentation-client.ts`), or let it pass when the check fails. Never put BotID on a provider webhook; verify its signature instead
 - Hide or make optional the Google, GitHub or LinkedIn sign-in buttons. A provider without keys is a setup task, not a reason to hide its button
 - Accept a provider sign-in whose email the provider has not verified
 - Let an account sign in before its email is confirmed, or confirm an email when its link is merely opened

@@ -27,6 +27,7 @@
     "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^5.2.1",
     "@sentry/nextjs": "^10.76.0",
+    "botid": "1.5.11",
     "dotenv": "^16.5.0",
     "geist": "^1.7.2",
     "next": "^15.5.27",

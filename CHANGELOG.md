@@ -6,6 +6,10 @@ Every pull request adds its entry under `Unreleased`. At release time, `Unreleas
 
 ## [Unreleased]
 
+### Security (headers and bot protection)
+- Every response now sends a Content Security Policy that allows scripts, styles, fonts, images, frames and requests only from this site, forbids other sites from framing it, and lets forms post only here, plus `Strict-Transport-Security` (two years), `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin` and a `Permissions-Policy` that turns off features the site does not use. The `X-Powered-By` header is gone
+- Starting a Google, GitHub or LinkedIn sign-in is checked by Vercel BotID on the server before anything else, and refused with a 403 and a plain message on the login page when BotID does not confirm a person or the check itself fails. Tests choose BotID's verdict through a local test mode that cannot switch on in a Vercel deployment. The data inventory lists BotID's browser signals
+
 ### Security (database scripts)
 - `scripts/seed.ts` and `scripts/reset-db.ts` refuse to run against anything but a database on this machine, and refuse to run on any Vercel deployment, so a mistyped or production `DATABASE_URL` can never be dropped or filled with fictional people. Errors say what is wrong without printing the URL, which can hold a password
 - `scripts/reset-db.ts` runs `dropdb`, `createdb` and `psql` without a shell, with every value as its own argument and any password passed through the environment, instead of building shell commands from `DATABASE_URL`. The seed lookup uses a parameterized query

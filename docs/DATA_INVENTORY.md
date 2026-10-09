@@ -25,6 +25,7 @@ PresencePilot is in development and has no production deployment yet. The only p
 | --- | --- | --- | --- | --- | --- | --- |
 | Signing in with Google, GitHub or LinkedIn | The name, profile picture link and account id the chosen provider shares, and the email address it marks as verified. GitHub lists every address on the account; only the verified primary one is kept. The access token the provider issues is used once, on the server, to read that verified address, and is never stored | Business owners and staff who sign in | Contract (GDPR Art. 6(1)(b)): needed to provide the account | Only in the visitor's own browser, inside the session cookie, which is signed and encrypted with the server's secret. Nothing is written to a database | Until sign-out, 7 days without a visit (each visit after the first day extends it), or 30 days after sign-in, whichever comes first | The provider the person chose |
 | Running and securing the site | Server error reports in Sentry: error type and message, stack trace, route, page address without its query string, and time. Email addresses and numbers of nine or more digits are redacted before sending; no IP address, cookies, headers, request body, user or breadcrumbs are sent (`src/lib/sentry-scrub.ts`). Sent only from production, and only once `SENTRY_DSN` is set | Anyone whose request causes a server error | Legitimate interests (GDPR Art. 6(1)(f)): keeping the service working | Sentry | Sentry's retention for the plan in use (record it here when the project is created) | Sentry |
+| Telling people from bots when they start a sign-in (Vercel BotID) | Signals from the browser and request that BotID uses to tell people from automated bots, such as browser and device characteristics and how the request was made. We receive only a verdict: person or bot | Visitors who press a sign-in button | Legitimate interests (GDPR Art. 6(1)(f)): protecting sign-in from abuse | Nothing is kept by us; Vercel processes the signals to return the verdict | None on our side | Vercel |
 | Hosting (planned) | When the site is deployed: IP address, browser, pages requested and time of request, in the host's request logs | Visitors | Legitimate interests (GDPR Art. 6(1)(f)): delivering and protecting the site | Vercel (planned host) | The host's log retention for the plan (record it here at deployment) | Vercel |
 
 ### Collected in the browser only, never sent
@@ -48,7 +49,7 @@ None.
 | GitHub | Signs people in, only when they choose GitHub | The sign-in request; GitHub returns the name, picture, account id and the account's email addresses with whether each is verified | United States | EU-U.S. Data Privacy Framework where certified, otherwise Standard Contractual Clauses | GitHub's standard terms; record the review date |
 | LinkedIn | Signs people in, only when they choose LinkedIn | The sign-in request; LinkedIn returns the name, picture, account id and email with whether it is verified | United States (LinkedIn Ireland for EU members) | EU-U.S. Data Privacy Framework where certified, otherwise Standard Contractual Clauses | LinkedIn's standard terms; record the review date |
 | Sentry (Functional Software, Inc.) | Server error reports, scrubbed before sending; production only | Error details as described above | United States | EU-U.S. Data Privacy Framework where certified, otherwise Standard Contractual Clauses | Sentry's standard DPA; record the review date |
-| Vercel (planned) | Hosting and request logs once deployed | Request metadata | United States | EU-U.S. Data Privacy Framework where certified, otherwise Standard Contractual Clauses | Vercel's standard DPA; record the review date at deployment |
+| Vercel (planned) | Hosting and request logs once deployed, and BotID's person-or-bot check when a sign-in starts | Request metadata and BotID's browser signals | United States | EU-U.S. Data Privacy Framework where certified, otherwise Standard Contractual Clauses | Vercel's standard DPA; record the review date at deployment |
 
 No analytics, email provider, database host, payment provider or AI provider is in use. Each one is added here, and to the privacy policy, before its first call reaches production.
 
@@ -65,7 +66,8 @@ No analytics, email provider, database host, payment provider or AI provider is 
 
 - Every connection is encrypted with HTTPS once deployed (the host serves HTTPS only)
 - The session cookie is `HttpOnly`, `SameSite=Lax`, and `Secure` on HTTPS and on every Vercel deployment, and is encrypted with `NEXTAUTH_SECRET`
-- A provider sign-in is accepted only with an email the provider marks as verified
+- A provider sign-in is accepted only with an email the provider marks as verified, and starting one is checked by Vercel BotID on the server and refused unless confirmed as a person
+- Every response carries a Content Security Policy that allows only this site's own origin, HSTS, and headers that forbid framing and content sniffing
 - Error reports are scrubbed before they leave the server (see above)
 - Secrets live only in the host's environment variables; the repository is scanned for secrets on every push
 
