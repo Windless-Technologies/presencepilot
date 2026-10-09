@@ -6,6 +6,19 @@ Every pull request adds its entry under `Unreleased`. At release time, `Unreleas
 
 ## [Unreleased]
 
+### Added (sign-in)
+- The login page always shows Continue with Google, GitHub and LinkedIn, as the engineering standards require. A provider whose keys are not set yet says "<Provider> sign-in isn't available yet." in place when pressed, instead of disappearing or leading to an error page. GitHub and LinkedIn are new; LinkedIn uses its current OpenID Connect sign-in
+- After signing in, people land on onboarding; when a sign-in is refused they come back to the login page with a plain message (for example, when the provider has not confirmed their email, or GitHub cannot be reached) rather than NextAuth's error page
+- Calls to GitHub during sign-in go through the engineering standards' resilience helper (`src/lib/fetch-with-resilience.ts`, with its tests): a 5-second limit per attempt, an overall deadline, and at most two retries of a temporary failure
+
+### Security (sign-in)
+- A provider sign-in is accepted only with an email the provider marks as verified. For GitHub, only the account's verified primary address is used, so an address someone added to their GitHub account without verifying cannot be used to sign in as its owner
+- The Google access token was copied into the session, where any script on the page could read it from `/api/auth/session`. Sessions now hold only the name, verified email, picture and account id
+- Sessions end 30 days after sign-in however active, as well as after 7 days without a visit. Sessions issued before this change carry no sign-in time and end at once, so everyone signs in again
+- Session cookies are `Secure` on every Vercel deployment as well as whenever `NEXTAUTH_URL` is HTTPS, and stay `HttpOnly` and `SameSite=Lax`
+- The email and password fields on the login page never did anything. They are now labeled, switched off, and marked "Email sign-in is coming soon", so nobody types a password that goes nowhere
+- `.env.example` values are blank instead of placeholders such as `your_google_client_id`: code treats a blank value as unset, but a placeholder would have switched Google on with keys that do not work
+
 ### Added (accessibility)
 - Every page is scanned by axe-core through Playwright on every pull request, with the WCAG 2.1 A and AA and WCAG 2.2 AA tags passed explicitly, at desktop and phone widths, against a production build (`npm run test:a11y`, `tests/a11y/pages.spec.ts`). The scan also fails a page that is wider than a phone screen
 

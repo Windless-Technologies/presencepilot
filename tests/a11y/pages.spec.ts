@@ -9,6 +9,7 @@ import { expectNoA11yViolations } from '../support/axe'
 const PAGES: Array<[name: string, path: string]> = [
   ['homepage', '/'],
   ['login', '/login'],
+  ['login-error', '/login?error=unverified-email'],
   ['onboarding', '/onboarding'],
   ['not-found', '/this-page-does-not-exist']
 ]
