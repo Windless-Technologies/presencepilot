@@ -1,0 +1,28 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    # Version updates wait seven days after a release is published, long
+    # enough for a hijacked or broken release to be found and pulled.
+    # Security updates are not delayed.
+    cooldown:
+      default-days: 7
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    # A week's scheduled action version bumps arrive in a single pull request
+    # instead of one pull request each. Every pull request runs the full CI
+    # suite, so separate ones multiplied the minutes for changes reviewed the
+    # same way. Security updates are not grouped and still open immediately.
+    groups:
+      github-actions:
+        patterns: ["*"]

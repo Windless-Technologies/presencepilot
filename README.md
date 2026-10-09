@@ -235,7 +235,7 @@ npm run type-check
 - [Architecture & Tech Design](docs/TECH_DESIGN.md)
 - [Feature Brief](docs/FEATURE_BRIEF.md)
 - [Testing Strategy](docs/TESTING_STRATEGY.md)
-- [Security Guidelines](docs/SECURITY.md)
+- [Security Policy](SECURITY.md)
 - [Database Setup](docs/SETUP_DATABASE.md)
 - [UX Guidelines](docs/UX_GUIDELINES.md)
 - [User Stories](docs/USER_STORIES.md)

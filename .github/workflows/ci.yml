@@ -1,35 +1,95 @@
 name: CI
 
+# Quality gates on every pull request (engineering standards, section 7):
+# standards check, lint, typecheck, tests, build, then the dependency audit.
+# The secret scan (secrets.yml) and static analysis (codeql.yml) run as
+# their own workflows.
+#
+# If a step fails for a missing environment variable rather than a real
+# defect, add it as a repository secret and reference it here. Do not remove
+# the step.
+
 on:
   push:
     branches: [main]
+  # Deliberately unfiltered. A filter of `branches: [main]` here means a pull
+  # request whose base is another branch runs no checks at all, which is
+  # exactly when a stacked change is hardest to verify by eye.
   pull_request:
-    branches: [main]
+
+# Least privilege (standards, supply chain): every job only reads the
+# repository unless it declares more.
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build-and-test:
+  verify:
+    name: Standards, lint, typecheck, test, build
     runs-on: ubuntu-latest
-
+    timeout-minutes: 20
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
-          node-version: '20'
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Check project standards
+        # Milliseconds, no dependencies. Runs first so a personal address or a
+        # duplicate route tree fails in seconds, not minutes.
+        run: node scripts/check-standards.mjs
+
+      - name: Cache Next.js build
+        # Restored before installing dependencies, so the source hash in the
+        # key covers the repository and not every file in node_modules.
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ${{ github.workspace }}/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
       - name: Install dependencies
-        run: npm install
+        # Reproducible install from the committed lockfile. No Cypress specs
+        # exist yet, so the Cypress binary download is skipped; the npm
+        # package itself is still installed and audited.
+        run: npm ci
+        env:
+          CYPRESS_INSTALL_BINARY: "0"
 
       - name: Lint
         run: npm run lint
 
-      - name: Type Check
-        run: npm run type-check
+      - name: Typecheck
+        run: npx tsc --noEmit
 
-      - name: Unit Tests
-        run: npm run test:unit
+      - name: Test
+        run: npm test
 
       - name: Build
         run: npm run build
+
+  audit:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version-file: .nvmrc
+      # Standards, section 5: zero known vulnerabilities. Production
+      # dependencies block the merge at --audit-level=low (not high, which
+      # lets moderate advisories through indefinitely).
+      - name: Production dependencies (blocking)
+        run: npm audit --omit=dev --audit-level=low
+      # Development dependencies are reported, not blocking. Still fix them.
+      - name: All dependencies (report)
+        run: npm audit --audit-level=low || echo "::warning::Development dependency advisories found. See the log above."

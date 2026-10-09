@@ -1,5 +1,5 @@
-name: Feature Request
-description: Propose a new feature or improvement.
+name: Feature request
+description: Propose a new feature or improvement
 title: "[Feature]: "
 labels:
   - feature
@@ -12,30 +12,31 @@ body:
   - type: textarea
     id: problem
     attributes:
-      label: Problem or Opportunity
-      description: What problem are you trying to solve or improve?
-      placeholder: Describe the challenge or opportunity you're addressing.
+      label: Problem or opportunity
+      description: Who has it, what it costs them today, and how often.
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: The outcome
+      description: What success looks like, ideally as something measurable. Who benefits and how?
     validations:
       required: true
   - type: textarea
     id: proposal
     attributes:
-      label: Suggested Solution
-      description: How might we solve it? High-level logic or UI/UX notes.
-      placeholder: Describe the solution you'd propose.
-    validations:
-      required: true
-  - type: textarea
-    id: impact
-    attributes:
-      label: Impact
-      description: What would be the benefit of this feature? Who would it help?
-      placeholder: Describe who benefits and how.
+      label: Suggested solution
+      description: High-level logic or UI notes. Alternatives considered and their tradeoffs.
   - type: checkboxes
-    id: terms
+    id: ai
     attributes:
-      label: Code of Conduct
-      description: By submitting this issue, you agree to follow our Code of Conduct.
+      label: AI
       options:
-        - label: I agree to follow this project's Code of Conduct
-          required: true
+        - label: This involves an AI model. It will start from a written spec and get evals before launch.
+  - type: textarea
+    id: done
+    attributes:
+      label: Acceptance criteria
+      placeholder: |
+        - [ ] ...
