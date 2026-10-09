@@ -19,11 +19,14 @@ semgrep scan --config p/default --error --metrics=off
 npm run lint
 npx tsc --noEmit
 npm test
+npm run test:a11y
 npm run build
 npm audit --omit=dev --audit-level=low
 ```
 
 The secret scan and Semgrep need `trufflehog` and `semgrep` installed locally (`brew install trufflehog semgrep`, or `pip install semgrep`). They are the same scans CI runs (`.github/workflows/secrets.yml` and `codeql.yml`), so a finding never reaches a pull request. Run `actionlint` on any workflow you change.
+
+`npm run test:a11y` builds the site and runs axe (`tests/a11y/`) against `next start` at desktop and phone widths, on port 3100 unless `PLAYWRIGHT_PORT` names another. On a machine without Playwright's own Chromium, point `PLAYWRIGHT_CHROMIUM_PATH` at an installed one.
 
 `npm audit --audit-level=low` (development dependencies too) is reported in CI and still fixed where a fix exists. Husky runs lint-staged on commit and the typecheck on push; let the hooks run and fix what they flag.
 
@@ -52,7 +55,8 @@ The secret scan and Semgrep need `trufflehog` and `semgrep` installed locally (`
 
 ## Always
 
-- Add new pages to the accessibility scan once it exists (`tests/a11y/`), with the WCAG 2.1 AA and 2.2 AA tags passed to axe explicitly
+- Add new pages to the accessibility scan (`tests/a11y/pages.spec.ts`); axe gets the WCAG 2.1 AA and 2.2 AA tags explicitly (`tests/support/axe.ts`)
+- Fix a flaky test instead of retrying it
 - Add a test with every bug fix, and a test that attempts the attack with every security fix
 - Check recent commits and open pull requests before starting; another session may be working in the same files
 - Rate limit sign-in, registration, password reset and any route that sends email

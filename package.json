@@ -13,7 +13,8 @@
     "test:e2e": "cypress run",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test:a11y": "playwright test"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
@@ -27,6 +28,7 @@
     "@hookform/resolvers": "^5.2.1",
     "@sentry/nextjs": "^10.76.0",
     "dotenv": "^16.5.0",
+    "geist": "^1.7.2",
     "next": "^15.5.27",
     "next-auth": "^4.24.15",
     "pg": "^8.15.6",
@@ -36,8 +38,10 @@
     "yup": "^1.6.1"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@chromatic-com/storybook": "^3.2.6",
     "@eslint/eslintrc": "^3",
+    "@playwright/test": "^1.63.0",
     "@storybook/addon-essentials": "^8.6.12",
     "@storybook/addon-onboarding": "^8.6.12",
     "@storybook/blocks": "^8.6.12",
