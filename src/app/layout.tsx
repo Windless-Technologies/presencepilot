@@ -3,6 +3,7 @@ import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import localFont from 'next/font/local'
 import './globals.css'
+import LegalFooter from '@/components/LegalFooter'
 
 // Every font ships with the app and is served from this site: no build-time
 // or visitor request goes to a font host (engineering standards, section 14).
@@ -34,6 +35,7 @@ export default function RootLayout({
         className={`${GeistSans.variable} ${GeistMono.variable} ${poppins.variable} antialiased`}
       >
         {children}
+        <LegalFooter />
       </body>
     </html>
   )

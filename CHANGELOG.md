@@ -6,6 +6,10 @@ Every pull request adds its entry under `Unreleased`. At release time, `Unreleas
 
 ## [Unreleased]
 
+### Added (legal pages)
+- `/privacy`, `/terms` and `/accessibility`, linked from a footer on every page. The privacy policy is written from `docs/DATA_INVENTORY.md` and names every processor in it (Google, GitHub, LinkedIn, Sentry and Vercel), with a test that fails when the inventory lists a processor the policy does not. The accessibility statement follows the engineering standards' template and says plainly that the site is partially conformant until a manual audit is done. All three pages are in the accessibility scan
+- No analytics run on the site, so there is no consent banner; the privacy policy says so
+
 ### Security (headers and bot protection)
 - Every response now sends a Content Security Policy that allows scripts, styles, fonts, images, frames and requests only from this site, forbids other sites from framing it, and lets forms post only here, plus `Strict-Transport-Security` (two years), `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin` and a `Permissions-Policy` that turns off features the site does not use. The `X-Powered-By` header is gone
 - Starting a Google, GitHub or LinkedIn sign-in is checked by Vercel BotID on the server before anything else, and refused with a 403 and a plain message on the login page when BotID does not confirm a person or the check itself fails. Tests choose BotID's verdict through a local test mode that cannot switch on in a Vercel deployment. The data inventory lists BotID's browser signals
