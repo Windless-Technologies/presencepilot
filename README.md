@@ -236,6 +236,7 @@ npm run type-check
 - [Feature Brief](docs/FEATURE_BRIEF.md)
 - [Testing Strategy](docs/TESTING_STRATEGY.md)
 - [Security Policy](SECURITY.md)
+- [Personal Data Inventory](docs/DATA_INVENTORY.md)
 - [Database Setup](docs/SETUP_DATABASE.md)
 - [UX Guidelines](docs/UX_GUIDELINES.md)
 - [User Stories](docs/USER_STORIES.md)

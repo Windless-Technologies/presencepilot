@@ -6,6 +6,10 @@ Every pull request adds its entry under `Unreleased`. At release time, `Unreleas
 
 ## [Unreleased]
 
+### Added (monitoring and privacy records)
+- `docs/DATA_INVENTORY.md` records what personal data PresencePilot handles today (Google sign-in in an encrypted session cookie, scrubbed Sentry error reports), what is collected only in the browser and never sent (the onboarding wizard, the placeholder email and password fields), every processor (Google, Sentry, and Vercel once deployed), the sign-in cookies, and how privacy requests are answered. The legal entity that operates PresencePilot is marked for confirmation
+- A test pins what `src/instrumentation.ts` gives Sentry: reports only from production with `SENTRY_DSN` set (a blank value counts as unset), `sendDefaultPii` off, no tracing or breadcrumbs, every event scrubbed, and `onRequestError` wired. The Sentry setup itself already matched the engineering standards' monitoring template and is unchanged
+
 ### Added (engineering standards baseline)
 - PresencePilot adopts the engineering standards. `scripts/check-standards.mjs` (read from `standards.config.json`) runs first in CI and fails on personal email addresses, links to private repositories, a second route tree, or error tracking that drifts from the monitoring template
 - A secret scan (TruffleHog) runs on every push and pull request and over the full history weekly, and CodeQL static analysis runs on every pull request
