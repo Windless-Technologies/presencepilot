@@ -8,13 +8,12 @@ declare module 'next-auth' {
       name?: string
       image?: string
     } & DefaultSession['user']
-    accessToken: string
   }
 }
 
 declare module 'next-auth/jwt' {
   interface JWT {
-    id: string
-    accessToken?: string
+    /** When this sign-in began, in seconds; sessions end 30 days later. */
+    signedInAt?: number
   }
 }

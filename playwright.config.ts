@@ -52,7 +52,16 @@ export default defineConfig({
       NEXTAUTH_URL: BASE_URL,
       // Signs test sessions only. Never a real secret.
       NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET ?? 'playwright-test-secret',
-      NEXT_TELEMETRY_DISABLED: '1'
+      NEXT_TELEMETRY_DISABLED: '1',
+      // GitHub is configured with test-only values so tests/e2e/sign-in.spec.ts
+      // can check a configured provider's start; the browser never reaches
+      // GitHub. Google and LinkedIn stay unconfigured to test their notice.
+      GITHUB_CLIENT_ID: 'playwright-github-client',
+      GITHUB_CLIENT_SECRET: 'playwright-not-a-real-value',
+      GOOGLE_CLIENT_ID: '',
+      GOOGLE_CLIENT_SECRET: '',
+      LINKEDIN_CLIENT_ID: '',
+      LINKEDIN_CLIENT_SECRET: ''
     },
     reuseExistingServer: !process.env.CI,
     timeout: 240_000
