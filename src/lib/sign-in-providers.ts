@@ -28,6 +28,9 @@ export function unavailableReason(id: string): string {
 
 export const UNVERIFIED_EMAIL = 'unverified-email'
 
+/** The `error` value when Vercel BotID could not confirm a person started the sign-in. */
+export const BOT_REFUSAL = 'bot-check'
+
 /**
  * What the login page says for the `error` value NextAuth or the sign-in
  * callback sends back. Never the internal detail: only what the person can do.
@@ -36,6 +39,9 @@ export function signInErrorMessage(error: string | undefined): string | null {
   if (!error) return null
   if (error === UNVERIFIED_EMAIL) {
     return 'That account has no confirmed email address. Confirm your email with the provider, or sign in another way.'
+  }
+  if (error === BOT_REFUSAL) {
+    return 'We could not confirm a person started this sign-in. Reload the page and try again.'
   }
   const match = /^([a-z]+)-unavailable$/.exec(error)
   const name = match ? providerName(match[1]!) : null

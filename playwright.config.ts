@@ -53,6 +53,9 @@ export default defineConfig({
       // Signs test sessions only. Never a real secret.
       NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET ?? 'playwright-test-secret',
       NEXT_TELEMETRY_DISABLED: '1',
+      // Lets the tests choose Vercel BotID's verdict with a cookie
+      // (src/lib/bot.ts). Ignored on any Vercel deployment.
+      BOTID_LOCAL_TEST: '1',
       // GitHub is configured with test-only values so tests/e2e/sign-in.spec.ts
       // can check a configured provider's start; the browser never reaches
       // GitHub. Google and LinkedIn stay unconfigured to test their notice.
