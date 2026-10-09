@@ -6,6 +6,13 @@ Every pull request adds its entry under `Unreleased`. At release time, `Unreleas
 
 ## [Unreleased]
 
+### Security (database scripts)
+- `scripts/seed.ts` and `scripts/reset-db.ts` refuse to run against anything but a database on this machine, and refuse to run on any Vercel deployment, so a mistyped or production `DATABASE_URL` can never be dropped or filled with fictional people. Errors say what is wrong without printing the URL, which can hold a password
+- `scripts/reset-db.ts` runs `dropdb`, `createdb` and `psql` without a shell, with every value as its own argument and any password passed through the environment, instead of building shell commands from `DATABASE_URL`. The seed lookup uses a parameterized query
+
+### Fixed (database scripts)
+- The reset script reported "Database reset complete" when seeding had failed. `psql` now stops at the first error and the script fails. It currently fails every time, because `scripts/seed.sql` expects `users`, `reviews` and `posts` tables that no file in the repository creates; see the README
+
 ### Added (sign-in)
 - The login page always shows Continue with Google, GitHub and LinkedIn, as the engineering standards require. A provider whose keys are not set yet says "<Provider> sign-in isn't available yet." in place when pressed, instead of disappearing or leading to an error page. GitHub and LinkedIn are new; LinkedIn uses its current OpenID Connect sign-in
 - After signing in, people land on onboarding; when a sign-in is refused they come back to the login page with a plain message (for example, when the provider has not confirmed their email, or GitHub cannot be reached) rather than NextAuth's error page

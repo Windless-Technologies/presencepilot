@@ -1,12 +1,15 @@
 import { Client } from 'pg'
 import dotenv from 'dotenv'
+import { localDatabase } from './local-database'
 
 // Load environment variables
 dotenv.config()
 
-// Validate DATABASE_URL
-if (!process.env.DATABASE_URL) {
-  console.error('❌ DATABASE_URL environment variable is required')
+// Fictional people go only into a local database, never a deployed one.
+try {
+  localDatabase(process.env.DATABASE_URL)
+} catch (e) {
+  console.error(`❌ ${e instanceof Error ? e.message : 'Invalid DATABASE_URL'}`)
   process.exit(1)
 }
 
@@ -25,9 +28,9 @@ async function seed() {
       (gen_random_uuid(), 'Alice Smith', 'alice@example.com', 'admin', NOW()),
       (gen_random_uuid(), 'Bob Jones', 'bob@example.com', 'user', NOW())`)
 
-    const res = await client.query(
-      `SELECT id FROM users WHERE email='alice@example.com'`
-    )
+    const res = await client.query('SELECT id FROM users WHERE email = $1', [
+      'alice@example.com'
+    ])
     const aliceId = res.rows[0]?.id
 
     // Check if user was found
