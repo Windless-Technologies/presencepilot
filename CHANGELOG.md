@@ -6,6 +6,9 @@ Every pull request adds its entry under `Unreleased`. At release time, `Unreleas
 
 ## [Unreleased]
 
+### Security (development dependencies)
+- Development-only advisories fall from 53 to 36 (critical stays at 2, high from 37 to 7): Jest 29 to 30, ts-jest to 29.4.14, lint-staged 15 to 16 and Cypress 14 to 16, each a release at least seven days old. lint-staged 17 is left out because it needs a newer Node 22 release than the one pinned here. What remains has no fix within reach: the Storybook 8 test addon holds Vitest at 3 (Tinypool, Vitest and its mocker; Storybook 9 or removing the unused Storybook would clear them), Storybook's Next.js integration pulls a sharp with no patched release, and braces (through eslint-config-next) and sprintf-js (through Jest's coverage loader) have no patched release on the versions their parents accept
+
 ### Changed (documentation)
 - The README describes what works today (homepage, Google, GitHub and LinkedIn sign-in, onboarding step 1 in the browser only, legal pages, Sentry, security headers) and labels the rest as planned. It no longer lists Socket.io, React Context, Tailwind UI Plus, jest-axe or cypress-axe, none of which is installed or used, says which installed tools have nothing using them yet, and drops a project structure with `pages/`, `hooks/` and `utils/` folders that do not exist, and no longer names a production address the product does not have. `docs/CONTRIBUTING.md` mentions `@Younique98`, Erica's GitHub account, instead of `@ericathompson`, which is not her account. The seed commands use `npx tsx` instead of `ts-node`, which was never installed
 - `docs/TESTING_STRATEGY.md` describes the tests that run (Jest, Playwright with axe-core) instead of jest-axe and Cypress suites that do not exist
