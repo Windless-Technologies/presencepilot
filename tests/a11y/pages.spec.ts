@@ -11,6 +11,9 @@ const PAGES: Array<[name: string, path: string]> = [
   ['login', '/login'],
   ['login-error', '/login?error=unverified-email'],
   ['onboarding', '/onboarding'],
+  ['privacy', '/privacy'],
+  ['terms', '/terms'],
+  ['accessibility', '/accessibility'],
   ['not-found', '/this-page-does-not-exist']
 ]
 
