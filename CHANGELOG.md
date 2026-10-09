@@ -6,6 +6,10 @@ Every pull request adds its entry under `Unreleased`. At release time, `Unreleas
 
 ## [Unreleased]
 
+### Changed (documentation)
+- The README describes what works today (homepage, Google, GitHub and LinkedIn sign-in, onboarding step 1 in the browser only, legal pages, Sentry, security headers) and labels the rest as planned. It no longer lists Socket.io, React Context, Tailwind UI Plus, jest-axe or cypress-axe, none of which is installed or used, says which installed tools have nothing using them yet, and drops a project structure with `pages/`, `hooks/` and `utils/` folders that do not exist, and no longer names a production address the product does not have. `docs/CONTRIBUTING.md` mentions `@Younique98`, Erica's GitHub account, instead of `@ericathompson`, which is not her account. The seed commands use `npx tsx` instead of `ts-node`, which was never installed
+- `docs/TESTING_STRATEGY.md` describes the tests that run (Jest, Playwright with axe-core) instead of jest-axe and Cypress suites that do not exist
+
 ### Added (legal pages)
 - `/privacy`, `/terms` and `/accessibility`, linked from a footer on every page. The privacy policy is written from `docs/DATA_INVENTORY.md` and names every processor in it (Google, GitHub, LinkedIn, Sentry and Vercel), with a test that fails when the inventory lists a processor the policy does not. The accessibility statement follows the engineering standards' template and says plainly that the site is partially conformant until a manual audit is done. All three pages are in the accessibility scan
 - No analytics run on the site, so there is no consent banner; the privacy policy says so

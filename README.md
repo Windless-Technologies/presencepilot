@@ -1,46 +1,74 @@
 # PresencePilot
 
-## **Overview**
+## Overview
 
-PresencePilot is a full-stack web application that helps **local businesses** manage their online presence across platforms like Google, Yelp, and Facebook — all from a single dashboard.
+PresencePilot is a web application for **local businesses** to manage their online presence across platforms like Google, Yelp and Facebook from a single dashboard.
 
-Built with best-in-class tools to ensure **scalability**, **accessibility**, and **real-world job readiness** for engineers contributing to it.
-
----
-
-## **Tech Stack**
-
-- **Framework:** Next.js (App Router, TypeScript)
-- **Styling:** TailwindCSS + Tailwind UI Plus
-- **State Management:** React Context API + Custom Hooks
-- **Authentication:** NextAuth.js (JWT)
-- **Realtime:** WebSocket (Socket.io)
-- **Database:** PostgreSQL (local or Supabase)
-- **Testing:** Jest, React Testing Library, Cypress, Axe (a11y)
-- **Docs & Storybook:** Storybook + Markdown Docs
-- **CI/CD:** GitHub Actions, Vercel Deployment
-- **Developer Experience:** Husky, lint-staged, Prettier, ESLint
+**Status: in development, not launched.** There is no production deployment yet. This README describes what the code does today; everything else is labeled as planned.
 
 ---
 
-## **Project Structure**
+## What works today
+
+- **Homepage** (`/`) saying what PresencePilot is, with a link to sign in
+- **Sign-in with Google, GitHub and LinkedIn** (`/login`), through NextAuth.js. All three buttons always show; a provider whose keys are not set yet says "<Provider> sign-in isn't available yet." when pressed. Only an email the provider has verified is accepted, starting a sign-in is checked by Vercel BotID, and the session lives only in an encrypted, `HttpOnly` cookie that ends after 7 days without a visit or 30 days after sign-in
+- **Onboarding, step 1** (`/onboarding`): business name, category and location, validated in the browser with react-hook-form and yup. Nothing is submitted or stored yet
+- **Privacy policy, terms and accessibility statement** (`/privacy`, `/terms`, `/accessibility`), linked from every page
+- **Server error reporting** to Sentry, server only and production only, scrubbed of personal data (`src/instrumentation.ts`)
+- **Security headers** on every response, including a Content Security Policy that allows only this site's own origin
+
+## Planned (in progress, not built yet)
+
+- Email sign-in with confirmation links, and rate limiting on sign-in
+- Onboarding steps 2 and 3 (connecting platforms, preferences), and saving onboarding
+- Viewing and responding to Google and Yelp reviews
+- Scheduling and previewing Facebook posts
+- Analytics and engagement trends
+- Role-based access for teams
+- Real-time review alerts
+- A database schema in the repository, and the app reading and writing it
+
+---
+
+## Tech Stack
+
+What is installed and used:
+
+- **Framework:** Next.js 15 (App Router, TypeScript), React 19
+- **Styling:** Tailwind CSS 4 and CSS modules; fonts served from the app (Geist, and Poppins on the login page)
+- **Forms:** react-hook-form and yup (onboarding)
+- **Authentication:** NextAuth.js 4 (JWT sessions) with Google, GitHub and LinkedIn; Vercel BotID
+- **Error tracking:** Sentry (`@sentry/nextjs`, server only)
+- **Testing:** Jest (unit), Playwright with axe-core (accessibility and end-to-end, against a production build)
+- **CI:** GitHub Actions (standards check, lint, typecheck, tests, accessibility scan, build, dependency audit), TruffleHog secret scan, CodeQL
+- **Developer experience:** Husky, lint-staged, Prettier, ESLint, Dependabot
+
+Installed but not used yet: Storybook (configured, no stories), Cypress (no specs), `pg` (used only by `scripts/seed.ts`), Headless UI and Heroicons. Hosting is planned on Vercel; PostgreSQL (local or Supabase) is planned for data.
+
+---
+
+## Project Structure
 
 ```plaintext
 src/
-├── components/        // UI Components
-├── hooks/             // Custom React hooks
-├── pages/             // Routes and API handlers
-│   └── api/           // Backend API logic
-├── styles/            // Tailwind/global styles
-├── utils/             // Reusable utilities
+├── app/               // Pages and routes (App Router): home, login, onboarding,
+│                      // privacy, terms, accessibility, api/auth (NextAuth)
+├── components/        // UI components (sign-in buttons, login form, legal footer)
+├── lib/               // Sign-in rules, BotID check, security headers, Sentry scrubber,
+│                      // fetch with time limits and retries
+├── styles/            // CSS modules
+├── fonts/             // Self-hosted font files and their license
 ├── types/             // Shared types
-├── lib/               // External services, API clients
-public/                // Assets
+└── instrumentation.ts // Server error reporting (Sentry)
+tests/                 // Playwright: accessibility scan (a11y/) and flows (e2e/)
+scripts/               // Standards check and local database scripts
 docs/                  // Technical documentation
-.github/               // CI configs, PR/issue templates
+.github/               // CI, PR and issue templates, Dependabot
 ```
 
 ## **Installation & Setup (Local)**
+
+Requires Node 22 (see `.nvmrc`).
 
 ### 1. Clone the Repository
 ```bash
@@ -50,17 +78,19 @@ cd presencepilot
 
 ### 2. Install Dependencies
 ```bash
-npm install
+npm ci
 ```
 
 ### 3. Environment Setup
 ```bash
 cp .env.example .env.local
 ```
-Then fill in:
-- `NEXTAUTH_SECRET`, `NEXTAUTH_URL`
-- `DATABASE_URL` (Postgres connection string)
-- Any API keys you're using
+Then fill in what you need. `.env.example` describes each value:
+- `NEXTAUTH_URL` and `NEXTAUTH_SECRET` for sign-in
+- `GOOGLE_*`, `GITHUB_*`, `LINKEDIN_*` for each provider you want to try locally (leave them blank to see the "isn't available yet" state)
+- `DATABASE_URL` only for the seed scripts
+
+Never paste a key into an issue, a pull request or a chat; production keys go straight into the Vercel project's environment variables.
 
 ---
 
@@ -89,16 +119,16 @@ In your `.env.local`:
 DATABASE_URL=postgresql://localhost/presencepilot
 ```
 
-Then seed the database with dummy data:
+Then, once the tables exist, seed the database with fictional data. The scripts are TypeScript; `npx tsx` runs them without adding a dependency:
 
 ```bash
-ts-node scripts/seed.ts
+npx tsx scripts/seed.ts
 ```
 
-Or use the reset script to fully drop, create, and seed:
+Or use the reset script to drop, create and seed (it stops at the first SQL error):
 
 ```bash
-ts-node scripts/reset-db.ts
+npx tsx scripts/reset-db.ts
 ```
 
 You can also use the raw SQL fallback:
@@ -106,8 +136,6 @@ You can also use the raw SQL fallback:
 ```bash
 psql presencepilot < scripts/seed.sql
 ```
-
-> ⚠️ Make sure your `.env.local` has a valid `DATABASE_URL` pointing to your local PostgreSQL instance.
 
 ---
 
@@ -124,7 +152,8 @@ If needed, open the Services console (Windows + R → services.msc) and start th
 Open Git Bash or PowerShell and run:
 
 ```bash
-createdb -h <host> -p <port> -U postgres presencepilot```
+createdb -h <host> -p <port> -U postgres presencepilot
+```
 ⚠️ If you see command not found, try the full path:
 
 ```bash
@@ -132,62 +161,52 @@ createdb -h <host> -p <port> -U postgres presencepilot```
 ```
 🔁 If you see the message `database "presencepilot" already exists`, you can skip this step.
 
-
 4. Set the DATABASE_URL
-Add this to .env.local file: 
-
-DATABASE_URL=postgresql://localhost/presencepilot
-
-5. Seed the Database
-Seed with dummy data:
+Add this to your `.env.local` file:
 
 ```bash
-npx ts-node scripts/seed.ts
+DATABASE_URL=postgresql://localhost/presencepilot
+```
+
+5. Seed the Database (once the tables exist)
+
+```bash
+npx tsx scripts/seed.ts
 ```
 
 Or reset (drop, create, seed):
 ```bash
-npx ts-node scripts/reset-db.ts
+npx tsx scripts/reset-db.ts
 ```
-If you get errors related to `.ts`, use the raw SQL fallback below.
 
 6. Seed Using Raw SQL (Fallback)
-If ts-node doesn't work, run:
 ```bash
 psql -U postgres -d presencepilot -f scripts/seed.sql
+```
 
 If psql is not recognized, use the full path:
 ```bash
 "/c/Program Files/PostgreSQL/17/bin/psql.exe" -U postgres -d presencepilot -f scripts/seed.sql
 ```
 
---
+---
 ⚠️ **Troubleshooting (Windows)**
 
-- **`createdb: command not found`**  
+- **`createdb: command not found`**
 Use the full path (Git Bash):
 ```bash
 /c/Program\ Files/PostgreSQL/17/bin/createdb.exe -U postgres presencepilot
 ```
 
-- **`ts-node` or `.ts` file errors**  
-Run via npx:
-```bash
-npx ts-node scripts/reset-db.ts
-```
+- **No tables after seeding?**
+The schema is not in the repository yet; create the tables from [Database Setup](docs/SETUP_DATABASE.md) first.
 
-- **No tables after seeding?**  
-Use the SQL fallback:
-```bash
-psql -U postgres -d presencepilot < scripts/seed.sql
-```
-
-- **Open psql session**  
+- **Open psql session**
 ```bash
 psql -U postgres -d presencepilot
 ```
 
-- **Exit psql**  
+- **Exit psql**
 ```bash
 \q
 ```
@@ -198,11 +217,12 @@ psql -U postgres -d presencepilot
 |--------|-------------|
 | `npm run dev` | Run local dev server |
 | `npm run lint` | Run ESLint |
-| `npm run type-check` | TypeScript type check |
-| `npm run test:unit` | Run Jest unit tests |
-| `npm run test:e2e` | Run Cypress tests |
-| `npm run storybook` | Start Storybook |
-| `npm run build-storybook` | Build static Storybook |
+| `npm run type-check` | TypeScript type check (same as `npx tsc --noEmit`) |
+| `npm test` | Run Jest unit tests |
+| `npm run test:a11y` | Build the site, then run the Playwright accessibility scan and end-to-end tests against `next start` |
+| `npm run build` | Production build |
+| `npm run storybook` | Start Storybook (no stories yet) |
+| `npm run test:e2e` | Cypress (no specs yet) |
 
 ---
 
@@ -210,35 +230,32 @@ psql -U postgres -d presencepilot
 
 ### Unit Tests
 ```bash
-npm run test:unit
+npm test
 ```
 
-### E2E Tests (Cypress)
-1. Open the test UI:
+### Accessibility and End-to-End Tests (Playwright)
 ```bash
-npx cypress open
+npx playwright install chromium   # once
+npm run test:a11y
 ```
-2. Or run headless:
-```bash
-npm run test:e2e
-```
+axe-core scans every page with the WCAG 2.1 A and AA and WCAG 2.2 AA rules, at desktop and phone widths. The test server uses port 3100; set `PLAYWRIGHT_PORT` if it is taken.
 
-### Lint + Type Check
-```bash
-npm run lint
-npm run type-check
-```
+### Before you push
+Run the full list in [`CLAUDE.md`](CLAUDE.md#before-you-push), in order: the standards check, the secret scan, Semgrep, lint, typecheck, tests, the accessibility scan, the build and the dependency audit. CI runs the same checks.
 
 ---
 
 ## **Documentation**
 
-- [API Contract](docs/API_CONTRACT.md)
-- [Architecture & Tech Design](docs/TECH_DESIGN.md)
+The planning documents describe where PresencePilot is headed; where they differ from the code, this README and the code are current.
+
+- [Security Policy](SECURITY.md) (how to report a vulnerability, and what is in place versus planned)
+- [Personal Data Inventory](docs/DATA_INVENTORY.md)
+- [Changelog](CHANGELOG.md)
+- [API Contract](docs/API_CONTRACT.md) (planned)
+- [Architecture & Tech Design](docs/TECH_DESIGN.md) (planned)
 - [Feature Brief](docs/FEATURE_BRIEF.md)
 - [Testing Strategy](docs/TESTING_STRATEGY.md)
-- [Security Policy](SECURITY.md)
-- [Personal Data Inventory](docs/DATA_INVENTORY.md)
 - [Database Setup](docs/SETUP_DATABASE.md)
 - [UX Guidelines](docs/UX_GUIDELINES.md)
 - [User Stories](docs/USER_STORIES.md)
@@ -248,38 +265,18 @@ npm run type-check
 
 ---
 
-## **Core Features**
-
-* View & respond to aggregated reviews (Google, Yelp)
-* Schedule and preview social media posts (Facebook)
-* View basic analytics and engagement trends
-* Role-based access for teams
-* WebSocket-based real-time review alerts
-
-## **Testing Strategy**
-
-* **Unit Tests:** `Jest` + `React Testing Library`
-* **E2E Tests:** `Cypress`
-* **Accessibility:** `jest-axe`, `cypress-axe`
-* **Visual UI Testing:** Storybook Test Runner
-
-
 ## **Contributing**
 
-1. Fork the repository and create a new feature branch.
-2. Follow all PR and issue templates.
-3. Run all checks before submitting:
-   ```bash
-   npm run lint
-   npm run type-check
-   npm test
-   ```
-4. Submit a pull request with a clear summary and linked issue.
+1. Create a branch from `main` and link an issue.
+2. Follow the pull request template and the issue forms.
+3. Run the checks in [`CLAUDE.md`](CLAUDE.md#before-you-push) before pushing.
+4. Open a pull request whose title is the final commit message (pull requests are squash merged), with a `CHANGELOG.md` entry under `Unreleased`.
 
 ---
-## **Live Deployment**
 
-Coming soon: https://presencepilot.co
+## **Deployment**
+
+Not deployed yet. Hosting is planned on Vercel, on the product's own domain once one is chosen.
 
 ## **License**
 
