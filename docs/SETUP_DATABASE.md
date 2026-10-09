@@ -75,8 +75,8 @@ psql presencepilot < scripts/seed.sql
 ```
 
 # Recommended: run the TypeScript scripts
-npx ts-node scripts/seed.ts
-npx ts-node scripts/reset-db.ts
+npx tsx scripts/seed.ts
+npx tsx scripts/reset-db.ts
 
 ---
 

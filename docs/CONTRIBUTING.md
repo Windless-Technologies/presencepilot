@@ -14,7 +14,7 @@ This project is structured like a real-world engineering org. Follow these steps
 
 2. Install dependencies:
    ```bash
-   npm install
+   npm ci
    cp .env.example .env.local
    ```
 
@@ -66,6 +66,6 @@ This project is structured like a real-world engineering org. Follow these steps
 
 ## Need Help?
 
-Tag `@ericathompson` in a GitHub comment or message in the Windless Discord under `#presencepilot-dev`.
+Tag `@Younique98` (Erica Thompson) in a GitHub comment or message in the Windless Discord under `#presencepilot-dev`.
 
 We're here to help you grow
