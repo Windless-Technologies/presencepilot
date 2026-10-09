@@ -1,8 +1,11 @@
-# Set default reviewer for all code
-*       @Younique98
+# Every change is reviewed by the code owner.
+* @Younique98
 
-# Optional: assign folders
-/src/pages/api/         @Younique98
-/src/components/        @Younique98
+# Sensitive paths (engineering standards, section 6): sign-in, data access,
+# error reporting, scripts that touch the database, and CI.
+/src/app/api/           @Younique98
+/src/lib/               @Younique98
+/src/instrumentation.ts @Younique98
+/scripts/               @Younique98
+/.github/               @Younique98
 /docs/                  @Younique98
-.github/workflows/      @Younique98

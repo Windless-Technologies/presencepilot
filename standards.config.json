@@ -1,0 +1,10 @@
+{
+  "$comment": "Organization details read by scripts/check-standards.mjs. Copied from the engineering-standards template. publicRepos lists only repositories confirmed public on GitHub: presencepilot itself. The engineering-standards repository is private, so it is named in prose but never linked.",
+  "template": false,
+  "templateRepositoryName": "engineering-standards",
+  "contactEmail": "hr@bravehaven.io",
+  "githubOwner": "Windless-Technologies",
+  "publicRepos": [
+    "presencepilot"
+  ]
+}

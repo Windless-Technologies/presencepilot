@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Windless Discord Support
+  - name: Windless Discord support
     url: https://discord.gg/KC58XzCjpT
     about: Join the Windless Discord to ask questions and get real-time help from the PresencePilot team.
-  - name: Report a Security Issue
+  - name: Report a security issue
     url: mailto:hr@bravehaven.io
-    about: Please report any security vulnerabilities directly to our security team via email.
+    about: Please report vulnerabilities privately, not in a public issue.
