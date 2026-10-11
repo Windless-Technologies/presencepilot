@@ -58,3 +58,6 @@ jest-coverage/
 # Storybook
 storybook-static/
 storybook
+
+# link check report (tests/links), written on every run
+test-results/links/
