@@ -6,6 +6,12 @@ Every pull request adds its entry under `Unreleased`. At release time, `Unreleas
 
 ## [Unreleased]
 
+### Changed (copy and lifecycle standards)
+- Every shareable page (home, sign in, onboarding, privacy, terms, accessibility) has its own title under 60 characters, its own description under 160, and an Open Graph and Twitter card with a share image drawn from the homepage's words. Home, sign in and onboarding used to share the title "PresencePilot". A unit test checks lengths and duplicates, and a browser test checks the tags and that the image loads. The page-not-found page keeps the site's default description
+- The onboarding page says it is in progress: only step 1 works, steps 2 and 3 are not built, and nothing entered is sent or saved, as the README already said. "All done!" loses its exclamation mark
+- `/.well-known/security.txt` (RFC 9116) points security researchers at the address in `SECURITY.md`, expires on 2027-10-10, and is tested. It has no `Canonical:` line until the product has a production domain
+- `docs/messaging.md` and `docs/lifecycle.md`, from the engineering standards templates, record each page's primary action, a claims register with the evidence for every claim on the site, and that there is no lead form yet. Everything only Erica can supply is marked "Owner input needed"
+
 ### Security (development dependencies)
 - Development-only advisories fall from 53 to 36 (critical stays at 2, high from 37 to 7): Jest 29 to 30, ts-jest to 29.4.14, lint-staged 15 to 16 and Cypress 14 to 16, each a release at least seven days old. lint-staged 17 is left out because it needs a newer Node 22 release than the one pinned here. What remains has no fix within reach: the Storybook 8 test addon holds Vitest at 3 (Tinypool, Vitest and its mocker; Storybook 9 or removing the unused Storybook would clear them), Storybook's Next.js integration pulls a sharp with no patched release, and braces (through eslint-config-next) and sprintf-js (through Jest's coverage loader) have no patched release on the versions their parents accept
 

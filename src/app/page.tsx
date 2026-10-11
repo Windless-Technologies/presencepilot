@@ -1,4 +1,8 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
+import { PAGES, pageMetadata } from '@/lib/page-metadata'
+
+export const metadata: Metadata = pageMetadata(PAGES.home)
 
 // The homepage says what PresencePilot is and what works today. It replaces
 // the create-next-app starter, which had no heading and linked visitors to

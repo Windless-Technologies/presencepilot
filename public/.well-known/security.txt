@@ -1,0 +1,4 @@
+Contact: mailto:hr@bravehaven.io
+Expires: 2027-10-10T00:00:00.000Z
+Policy: https://github.com/Windless-Technologies/presencepilot/blob/main/SECURITY.md
+Preferred-Languages: en

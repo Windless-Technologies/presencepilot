@@ -77,8 +77,14 @@ export default function OnboardingWizard() {
     <div className="min-h-screen bg-green-200 py-8">
       <div className="max-w-4xl mx-auto px-6">
         <h1 className="text-gray-800">Onboarding Wizard</h1>
+        {/* The README labels steps 2 and 3, and saving, as planned; the page
+            says so too (COPY_AND_CONVERSION_STANDARDS.md Section 3.3). */}
         <p className="text-gray-800">
-          Steps complete: {allStepsComplete ? 'All done!' : 'In progress'}
+          In progress: only step 1 works today. Steps 2 and 3 are not built yet,
+          and nothing you enter is sent or saved.
+        </p>
+        <p className="text-gray-800">
+          Steps complete: {allStepsComplete ? 'All done' : 'In progress'}
         </p>
 
         <div className="flex items-center">

@@ -4,6 +4,7 @@ import { GeistMono } from 'geist/font/mono'
 import localFont from 'next/font/local'
 import './globals.css'
 import LegalFooter from '@/components/LegalFooter'
+import { SITE_NAME } from '@/lib/page-metadata'
 
 // Every font ships with the app and is served from this site: no build-time
 // or visitor request goes to a font host (engineering standards, section 14).
@@ -18,8 +19,11 @@ const poppins = localFont({
   display: 'swap'
 })
 
+// The fallback for pages without their own metadata (the page-not-found
+// page). Every shareable page sets its own title, description and share card
+// from src/lib/page-metadata.ts.
 export const metadata: Metadata = {
-  title: 'PresencePilot',
+  title: SITE_NAME,
   description:
     'PresencePilot helps local businesses manage their online presence in one place. In development.'
 }

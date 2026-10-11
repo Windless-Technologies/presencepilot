@@ -1,11 +1,8 @@
 import type { Metadata } from 'next'
 import LegalPage from '@/components/LegalPage'
+import { PAGES, pageMetadata } from '@/lib/page-metadata'
 
-export const metadata: Metadata = {
-  title: 'Accessibility Statement | PresencePilot',
-  description:
-    'How PresencePilot works toward WCAG 2.2 AA, how it is tested, and how to report a barrier.'
-}
+export const metadata: Metadata = pageMetadata(PAGES.accessibility)
 
 const CONTACT = 'hr@bravehaven.io'
 
