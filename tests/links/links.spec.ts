@@ -10,6 +10,7 @@ import path from 'path'
 import {
   classifyLink,
   describeLoop,
+  isRedirectStatus,
   isResolvingStatus,
   fetchExternalLinks,
   linkCheckTarget,
@@ -158,6 +159,18 @@ test('every internal link and call to action resolves', async ({
     (loc) => {
       const verdict = classifyLink(loc, LINK_POLICY, options(base))
       consider(verdict, '(sitemap)')
+      return verdict
+    },
+    // A nested sitemap is read as a sitemap, not queued as a page: judged by
+    // the same rules, reported if forbidden, never crawled or counted.
+    (loc) => {
+      const verdict = classifyLink(loc, LINK_POLICY, options(base))
+      if (verdict.kind === 'forbidden')
+        problems.push({
+          page: '(sitemap)',
+          link: reportable(verdict.url),
+          problem: verdict.problem
+        })
       return verdict
     },
     (location, sitemapUrl) =>
@@ -370,7 +383,7 @@ async function get(
     })
     const status = response.status()
     const headers = response.headers()
-    const redirect = status >= 300 && status < 400
+    const redirect = isRedirectStatus(status)
     const location = redirect ? (headers['location'] ?? null) : null
     await response.dispose()
     if (redirect && location === null)
@@ -420,6 +433,7 @@ async function readSitemap(
   url: string,
   problems: Problem[],
   onLoc: (loc: string) => LinkVerdict,
+  onSitemap: (loc: string) => LinkVerdict,
   onRedirect: (
     location: string,
     sitemapUrl: string
@@ -445,7 +459,7 @@ async function readSitemap(
       return
     }
     const status = response.status()
-    if (status < 300 || status >= 400) break
+    if (!isRedirectStatus(status)) break
     const location = response.headers()['location']
     await response.dispose()
     if (!location) {
@@ -501,9 +515,9 @@ async function readSitemap(
   const { pages, sitemaps } = parseSitemap(await response.text())
   pages.forEach(onLoc)
   for (const nested of sitemaps) {
-    // A nested sitemap names the production address; onLoc maps it to the
+    // A nested sitemap names the production address; onSitemap maps it to the
     // build under test, and reports it if it points anywhere it must not.
-    const next = nestedSitemap(onLoc(nested), depth)
+    const next = nestedSitemap(onSitemap(nested), depth)
     if (next === null) continue
     if ('problem' in next) {
       problems.push({
@@ -518,6 +532,7 @@ async function readSitemap(
       next.read,
       problems,
       onLoc,
+      onSitemap,
       onRedirect,
       depth + 1
     )

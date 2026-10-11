@@ -487,3 +487,22 @@ describe("a DSN with a malformed escape in its user name", () => {
     }
   });
 });
+
+describe("a backslash before a pipe in the summary", () => {
+  // The pipe was escaped but the backslash before it was not, so "\\|"
+  // became an escaped backslash and a bare pipe, which split the cell.
+  it("stays inside its table cell", () => {
+    const report = {
+      target: "production",
+      site: "https://product.example.com",
+      pagesCrawled: 1,
+      externalLinks: 0,
+      problems: [{ page: "https://product.example.com/", link: "https://product.example.com/a", problem: "answers 404 \\| forged | cell" }],
+    };
+    const row = summary(report).split("\n").find((line) => line.includes("/a |"));
+    assert.ok(row, "the problem has its row");
+    // Pipes not preceded by an odd number of backslashes are cell borders.
+    const borders = row.match(/(?<!\\)(?:\\\\)*\|/g) ?? [];
+    assert.equal(borders.length, 4, row);
+  });
+});

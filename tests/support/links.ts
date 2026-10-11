@@ -247,6 +247,18 @@ function decodeSegment(segment: string): string {
   return current
 }
 
+/**
+ * The statuses that redirect, and so must name a Location to follow. Other
+ * 3xx answers (300 Multiple Choices, 304 Not Modified) resolve without one.
+ */
+export const REDIRECT_STATUSES: ReadonlySet<number> = new Set([
+  301, 302, 303, 307, 308
+])
+
+export function isRedirectStatus(status: number): boolean {
+  return REDIRECT_STATUSES.has(status)
+}
+
 /** 2xx and 3xx resolve. A redirect's target is then checked as a link of its own. */
 export function isResolvingStatus(status: number): boolean {
   return status >= 200 && status < 400

@@ -288,7 +288,13 @@ export function summary(report, runUrl = "") {
   return `${head}\n**${report.problems.length} broken or forbidden link(s).**\n\n| Link | Found on | Problem |\n| --- | --- | --- |\n${rows.join("\n")}\n${more}`;
 }
 
-const cell = (text) => String(text ?? "").replace(/\|/g, "\\|").replace(/[\r\n]/g, " ");
+// Backslashes are escaped first, so a backslash before a pipe in the text
+// cannot turn the pipe's escape into an escaped backslash and split the cell.
+const cell = (text) =>
+  String(text ?? "")
+    .replace(/\\/g, "\\\\")
+    .replace(/\|/g, "\\|")
+    .replace(/[\r\n]/g, " ");
 
 export async function main({ argv = process.argv.slice(2), env = process.env, fetchImpl = globalThis.fetch, log = console, retry = {} } = {}) {
   const file = argv[0] ?? "test-results/links/report.json";
