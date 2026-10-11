@@ -240,6 +240,8 @@ npm run test:a11y
 ```
 axe-core scans every page with the WCAG 2.1 A and AA and WCAG 2.2 AA rules, at desktop and phone widths. The test server uses port 3100; set `PLAYWRIGHT_PORT` if it is taken.
 
+The same run includes the link check (`tests/links/`): it crawls every page from the home page and the sitemap and fails on any internal link that does not resolve or any link that breaks the domain rules (localhost, vercel.app, an unlisted domain or a private repository); outside sites are requested only by the production run. CI also runs it against the live site daily and after each production deployment, once the repository variable `SITE_URL` names the product's domain (none is chosen yet), and reports a failure to Sentry through the secret `SENTRY_DSN`.
+
 ### Before you push
 Run the full list in [`CLAUDE.md`](CLAUDE.md#before-you-push), in order: the standards check, the secret scan, Semgrep, lint, typecheck, tests, the accessibility scan, the build and the dependency audit. CI runs the same checks.
 

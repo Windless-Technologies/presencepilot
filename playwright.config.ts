@@ -5,11 +5,14 @@ import { defineConfig, devices } from '@playwright/test'
 // side on one machine: set PLAYWRIGHT_PORT when 3100 is taken.
 const PORT = Number(process.env.PLAYWRIGHT_PORT ?? 3100)
 const BASE_URL = process.env.PLAYWRIGHT_BASE_URL ?? `http://localhost:${PORT}`
+// The production link check (.github/workflows/link-check.yml) crawls the
+// live site at PLAYWRIGHT_BASE_URL: no local server, and nothing written to it.
+const LIVE = process.env.LINK_CHECK_TARGET === 'production'
 
 export default defineConfig({
   testDir: './tests',
   // Only the browser suites. Unit tests run under Jest (`npm test`).
-  testMatch: ['a11y/**/*.spec.ts', 'e2e/**/*.spec.ts'],
+  testMatch: ['a11y/**/*.spec.ts', 'e2e/**/*.spec.ts', 'links/**/*.spec.ts'],
   // Not "test-results": the axe JSON results live there, and Playwright
   // empties its outputDir at the start of every run.
   outputDir: './playwright-output',
@@ -38,35 +41,49 @@ export default defineConfig({
   },
 
   projects: [
-    { name: 'desktop', use: { ...devices['Desktop Chrome'] } },
-    { name: 'mobile', use: { ...devices['Pixel 7'] } }
+    {
+      name: 'desktop',
+      use: { ...devices['Desktop Chrome'] },
+      testIgnore: 'links/**'
+    },
+    { name: 'mobile', use: { ...devices['Pixel 7'] }, testIgnore: 'links/**' },
+    // Every link and call to action resolves (engineering standards, section
+    // 8; .github/workflows/link-check.yml). One crawl is enough.
+    {
+      name: 'links',
+      testMatch: 'links/**/*.spec.ts',
+      use: { ...devices['Desktop Chrome'] }
+    }
   ],
 
-  webServer: {
-    // A production build and `next start`, not the dev server: every route is
-    // precompiled, which removes a class of hydration-timing flake and is
-    // what visitors get.
-    command: `npx next build && npx next start --port ${PORT}`,
-    url: BASE_URL,
-    env: {
-      NEXTAUTH_URL: BASE_URL,
-      // Signs test sessions only. Never a real secret.
-      NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET ?? 'playwright-test-secret',
-      NEXT_TELEMETRY_DISABLED: '1',
-      // Lets the tests choose Vercel BotID's verdict with a cookie
-      // (src/lib/bot.ts). Ignored on any Vercel deployment.
-      BOTID_LOCAL_TEST: '1',
-      // GitHub is configured with test-only values so tests/e2e/sign-in.spec.ts
-      // can check a configured provider's start; the browser never reaches
-      // GitHub. Google and LinkedIn stay unconfigured to test their notice.
-      GITHUB_CLIENT_ID: 'playwright-github-client',
-      GITHUB_CLIENT_SECRET: 'playwright-not-a-real-value',
-      GOOGLE_CLIENT_ID: '',
-      GOOGLE_CLIENT_SECRET: '',
-      LINKEDIN_CLIENT_ID: '',
-      LINKEDIN_CLIENT_SECRET: ''
-    },
-    reuseExistingServer: !process.env.CI,
-    timeout: 240_000
-  }
+  webServer: LIVE
+    ? undefined
+    : {
+        // A production build and `next start`, not the dev server: every route is
+        // precompiled, which removes a class of hydration-timing flake and is
+        // what visitors get.
+        command: `npx next build && npx next start --port ${PORT}`,
+        url: BASE_URL,
+        env: {
+          NEXTAUTH_URL: BASE_URL,
+          // Signs test sessions only. Never a real secret.
+          NEXTAUTH_SECRET:
+            process.env.NEXTAUTH_SECRET ?? 'playwright-test-secret',
+          NEXT_TELEMETRY_DISABLED: '1',
+          // Lets the tests choose Vercel BotID's verdict with a cookie
+          // (src/lib/bot.ts). Ignored on any Vercel deployment.
+          BOTID_LOCAL_TEST: '1',
+          // GitHub is configured with test-only values so tests/e2e/sign-in.spec.ts
+          // can check a configured provider's start; the browser never reaches
+          // GitHub. Google and LinkedIn stay unconfigured to test their notice.
+          GITHUB_CLIENT_ID: 'playwright-github-client',
+          GITHUB_CLIENT_SECRET: 'playwright-not-a-real-value',
+          GOOGLE_CLIENT_ID: '',
+          GOOGLE_CLIENT_SECRET: '',
+          LINKEDIN_CLIENT_ID: '',
+          LINKEDIN_CLIENT_SECRET: ''
+        },
+        reuseExistingServer: !process.env.CI,
+        timeout: 240_000
+      }
 })

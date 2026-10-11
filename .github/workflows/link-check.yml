@@ -1,0 +1,208 @@
+name: Link check
+
+# Every internal link and call to action must resolve on a fresh database and
+# in production (STANDARDS.md, section 8). From engineering-standards
+# templates/workflows/link-check.yml, with tests/links/, tests/support/links.ts
+# and scripts/report-link-check.mjs from the same templates. Changes for this
+# product:
+#   - PresencePilot has no database in use and no domain yet. The fresh job
+#     is a plain production build; SITE_URL has no fallback, so the
+#     production job fails until the variable names the chosen domain.
+#   - Cypress's binary is not downloaded (CYPRESS_INSTALL_BINARY), as in ci.yml.
+#
+# Why it exists: a home page button linked to a demo page that only exists
+# when a seeded demo account is in the database. The end-to-end tests ran
+# against a seeded database, so they passed, and nothing checked the live
+# site, where the button answered 404.
+#
+# Two jobs:
+#   fresh       every pull request and every push to main: a production build
+#               with nothing seeded (this product has no database). A link
+#               that only works with test data fails here. Every internal
+#               link is requested; external links meet the static rules
+#               (localhost, vercel.app, unowned or unlisted domains, private
+#               repositories) but are not requested, so a third-party outage
+#               never turns an unrelated pull request red.
+#   production  daily, after every successful production deployment, and on
+#               demand from main: the same crawl against SITE_URL, GET
+#               requests only, and the one that also requests every external
+#               link.
+#               A failure turns the run red (GitHub emails the person who last
+#               changed the schedule, and the deploy commit shows a failed
+#               check), lists the links in the job summary, and sends one
+#               error event to the product's Sentry project, whose alert
+#               rules page a person.
+#
+# Set once, in the repository settings:
+#   Variables  SITE_URL     the production address, https:// and the product's own domain
+#                           (no fallback: the product has no domain yet)
+#   Secrets    SENTRY_DSN   the product's DSN (the same one the app reports with)
+# A blank SENTRY_DSN is unset: the production job then reports by summary and
+# a red run only.
+
+on:
+  # Deliberately unfiltered, like ci.yml, so a stacked pull request is checked.
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    # Daily at 06:17 UTC. Off the hour, when scheduled runs are least delayed.
+    - cron: "17 6 * * *"
+  # Vercel (and most hosts with a GitHub integration) records each deployment
+  # as a GitHub deployment and marks it successful once the production domain
+  # serves it. The job below runs only for a successful Production one.
+  deployment_status:
+  # Run by hand from main only: the production job skips a dispatch from any
+  # other branch (see its `if`), because its report step holds SENTRY_DSN.
+  workflow_dispatch:
+
+# Least privilege (STANDARDS.md, section 5). Both jobs only read the
+# repository; reporting goes to Sentry with its own DSN, not through GitHub.
+permissions:
+  contents: read
+
+# A deployment's environment is part of the group. Every deployment_status
+# event starts a run, including a Preview or demo deployment's, and those
+# runs skip both jobs; without the environment, one of them would cancel the
+# production crawl a Production deployment had just started. Pushes, pull
+# requests and schedules have no deployment, so they group by ref alone.
+concurrency:
+  group: link-check-${{ github.event_name }}-${{ github.ref }}-${{ github.event.deployment.environment }}
+  cancel-in-progress: true
+
+jobs:
+  fresh:
+    name: Links resolve on a fresh database
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: "true"
+      LINK_CHECK_TARGET: fresh
+      # The one switch for requesting external sites. Off here: a pull
+      # request is never failed by someone else's outage.
+      LINK_CHECK_EXTERNAL: "false"
+      PLAYWRIGHT_PORT: "3100"
+      SITE_URL: ${{ vars.SITE_URL }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+        env:
+          CYPRESS_INSTALL_BINARY: "0"
+
+      - name: Test this workflow's guards, the link rules and the report
+        # Fails if the production job loses its default-branch guard or
+        # checkout, or if an action, permission, secret or the fresh
+        # database's no-seed rule drifts; and if the link rules or the report
+        # let another host or a personal number through.
+        run: node --test scripts/link-check-workflow.test.mjs scripts/link-check-rules.test.mjs scripts/report-link-check.test.mjs
+
+      - name: Install Playwright's browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Check every link
+        # The Playwright config builds the app and serves it on PLAYWRIGHT_PORT.
+        run: npx playwright test tests/links
+
+      - name: Summarize
+        if: always()
+        run: node scripts/report-link-check.mjs test-results/links/report.json
+
+      - name: Keep the report
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: link-check-fresh
+          path: test-results/links/
+          retention-days: 14
+
+  production:
+    name: Links resolve in production
+    # A manual run uses the workflow and scripts of whichever branch the
+    # person dispatching it picks, so a dispatch from any branch but main
+    # would run unreviewed code with SENTRY_DSN. Only main's code gets the
+    # secret. A schedule always runs main's code. A Production deployment
+    # can come from another branch (a manual promote or a CLI deploy), so the
+    # checkout below takes main explicitly rather than the deployment's ref.
+    if: >-
+      github.event_name == 'schedule' ||
+      (github.event_name == 'workflow_dispatch' &&
+       github.ref == 'refs/heads/main') ||
+      (github.event_name == 'deployment_status' &&
+       github.event.deployment_status.state == 'success' &&
+       github.event.deployment.environment == 'Production')
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: "true"
+      LINK_CHECK_TARGET: production
+      # On here: broken external links are found daily and reported to Sentry.
+      LINK_CHECK_EXTERNAL: "true"
+      SITE_URL: ${{ vars.SITE_URL }}
+      # The crawl runs against the live site; no local server is started.
+      PLAYWRIGHT_BASE_URL: ${{ vars.SITE_URL }}
+    steps:
+      # Checked out first. The Report step runs even when an earlier step
+      # fails, and it needs scripts/report-link-check.mjs from the checkout:
+      # with checkout after the SITE_URL check, a missing SITE_URL left it
+      # without its script, so the failure never reached the summary or Sentry.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # The default branch's reviewed code, whatever ref started the run:
+          # the report step runs this checkout's script with SENTRY_DSN.
+          ref: main
+          persist-credentials: false
+
+      - name: SITE_URL is set
+        # Blank means unset. Never fall back to a deployment's own URL: that
+        # is a hosting address, not the domain visitors use.
+        run: |
+          if [ -z "${SITE_URL// /}" ]; then
+            echo "::error::Set the repository variable SITE_URL to the production address."
+            exit 1
+          fi
+          case "$SITE_URL" in
+            https://*) ;;
+            *) echo "::error::SITE_URL must start with https://"; exit 1 ;;
+          esac
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+        env:
+          CYPRESS_INSTALL_BINARY: "0"
+
+      - name: Install Playwright's browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Check every link on the live site
+        # Read only: the crawl sends GET requests and the browser blocks every
+        # other method. No secret is available to this step.
+        run: npx playwright test tests/links
+
+      - name: Report
+        if: always()
+        env:
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        run: node scripts/report-link-check.mjs test-results/links/report.json
+
+      - name: Keep the report
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: link-check-production
+          path: test-results/links/
+          retention-days: 30

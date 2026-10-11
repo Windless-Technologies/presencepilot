@@ -14,6 +14,7 @@ Run what CI runs, in this order, and push only when all pass:
 
 ```bash
 node scripts/check-standards.mjs
+node --test scripts/link-check-workflow.test.mjs scripts/link-check-rules.test.mjs scripts/report-link-check.test.mjs
 trufflehog git file://. --since-commit origin/main --results=verified,unknown --fail
 semgrep scan --config p/default --error --metrics=off
 npm run lint
@@ -26,7 +27,7 @@ npm audit --omit=dev --audit-level=low
 
 The secret scan and Semgrep need `trufflehog` and `semgrep` installed locally (`brew install trufflehog semgrep`, or `pip install semgrep`). They are the same scans CI runs (`.github/workflows/secrets.yml` and `codeql.yml`), so a finding never reaches a pull request. Run `actionlint` on any workflow you change.
 
-`npm run test:a11y` builds the site and runs axe (`tests/a11y/`) against `next start` at desktop and phone widths, on port 3100 unless `PLAYWRIGHT_PORT` names another. On a machine without Playwright's own Chromium, point `PLAYWRIGHT_CHROMIUM_PATH` at an installed one.
+`npm run test:a11y` builds the site and runs axe (`tests/a11y/`) against `next start` at desktop and phone widths, on port 3100 unless `PLAYWRIGHT_PORT` names another. On a machine without Playwright's own Chromium, point `PLAYWRIGHT_CHROMIUM_PATH` at an installed one. It includes the link check (`tests/links/`, the `links` project), which CI's `link-check.yml` also runs on its own, with `LINK_CHECK_TARGET=fresh` and `LINK_CHECK_EXTERNAL=false`.
 
 `npm audit --audit-level=low` (development dependencies too) is reported in CI and still fixed where a fix exists. Husky runs lint-staged on commit and the typecheck on push; let the hooks run and fix what they flag.
 
