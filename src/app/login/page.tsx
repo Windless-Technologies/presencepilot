@@ -2,6 +2,10 @@ import styles from '../../styles/login.module.css'
 import Image from 'next/image'
 import LoginForm from '@/components/LoginForm'
 import { signInErrorMessage } from '@/lib/sign-in-providers'
+import type { Metadata } from 'next'
+import { PAGES, pageMetadata } from '@/lib/page-metadata'
+
+export const metadata: Metadata = pageMetadata(PAGES.login)
 
 export default async function LoginPage({
   searchParams

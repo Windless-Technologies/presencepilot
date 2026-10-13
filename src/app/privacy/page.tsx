@@ -1,11 +1,8 @@
 import type { Metadata } from 'next'
 import LegalPage from '@/components/LegalPage'
+import { PAGES, pageMetadata } from '@/lib/page-metadata'
 
-export const metadata: Metadata = {
-  title: 'Privacy Policy | PresencePilot',
-  description:
-    'What personal data PresencePilot handles, why, and who else sees it.'
-}
+export const metadata: Metadata = pageMetadata(PAGES.privacy)
 
 const CONTACT = 'hr@bravehaven.io'
 

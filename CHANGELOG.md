@@ -6,6 +6,12 @@ Every pull request adds its entry under `Unreleased`. At release time, `Unreleas
 
 ## [Unreleased]
 
+### Changed (copy and lifecycle standards)
+- Every shareable page (home, sign in, onboarding, privacy, terms, accessibility) has its own title under 60 characters, its own description under 160, and an Open Graph and Twitter card with a share image drawn from the homepage's words. Home, sign in and onboarding used to share the title "PresencePilot". A unit test checks lengths and duplicates, and a browser test checks the tags and that the image loads. The page-not-found page keeps the site's default description
+- The onboarding page says it is in progress: only step 1 works, steps 2 and 3 are not built, and nothing entered is sent or saved, as the README already said. "All done!" loses its exclamation mark
+- `/.well-known/security.txt` (RFC 9116) points security researchers at the address in `SECURITY.md`, expires on 2027-10-10, and is tested. It has no `Canonical:` line until the product has a production domain
+- `docs/messaging.md` and `docs/lifecycle.md`, from the engineering standards templates, record each page's primary action, a claims register with the evidence for every claim on the site, and that there is no lead form yet. Everything only Erica can supply is marked "Owner input needed"
+
 ### Fixed (standards check)
 - `scripts/check-standards.mjs` is the current engineering standards copy, which joins folded workflow lines without a NUL marker character, so ESLint's `no-control-regex` rule accepts it. Its results are unchanged
 

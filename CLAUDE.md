@@ -52,6 +52,7 @@ The secret scan and Semgrep need `trufflehog` and `semgrep` installed locally (`
 - Load fonts or other assets from a third-party network at build time
 - Pin a GitHub Action to a tag instead of a commit SHA, or give a workflow more than `contents: read` without a stated reason
 - Kill processes you did not start on a shared machine
+- Write, generate or edit the meaning of a review or testimonial, or ship urgency, scarcity, a counter or a "was" price that is not true (`design/COPY_AND_CONVERSION_STANDARDS.md` in the engineering standards, Sections 6 and 7). Every claim on a page goes in the claims register in `docs/messaging.md` with its evidence
 
 ## Always
 
@@ -61,6 +62,7 @@ The secret scan and Semgrep need `trufflehog` and `semgrep` installed locally (`
 - Check recent commits and open pull requests before starting; another session may be working in the same files
 - Rate limit sign-in, registration, password reset and any route that sends email
 - Check the `error` of every database call
+- Send every form and booking link to a named owner in a tracked system, with an instant acknowledgement, a Sentry report when saving or delivery fails, and an end-to-end test (`design/LIFECYCLE_AND_FUNNEL_STANDARDS.md` in the engineering standards, Section 4). There is no lead form yet; record the first one in `docs/lifecycle.md`
 - Add an entry to `CHANGELOG.md` under `Unreleased` for every change a user, client, or developer would notice
 - Update `docs/DATA_INVENTORY.md` and the privacy policy together when a feature starts collecting, storing, or sharing personal data
 - Use the pull request template. Include screenshots for UI changes
