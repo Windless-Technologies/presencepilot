@@ -49,7 +49,7 @@
     "@storybook/experimental-addon-test": "^8.6.12",
     "@storybook/experimental-nextjs-vite": "^8.6.12",
     "@storybook/react": "^8.6.12",
-    "@storybook/test": "^8.6.12",
+    "@storybook/test": "^8.6.15",
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.3",
@@ -71,7 +71,7 @@
     "jest": "^30.5.2",
     "lint-staged": "^16.4.0",
     "playwright": "^1.63.0",
-    "postcss": "8.5.28",
+    "postcss": "8.5.29",
     "prettier": "^3.9.9",
     "storybook": "^8.6.12",
     "tailwindcss": "^4.1.5",
@@ -85,7 +85,7 @@
     ]
   },
   "overrides": {
-    "postcss": "8.5.28"
+    "postcss": "8.5.29"
   },
   "engines": {
     "node": "22.x"
