@@ -73,7 +73,7 @@
     "playwright": "^1.63.0",
     "postcss": "8.5.28",
     "prettier": "^3.9.9",
-    "storybook": "^8.6.12",
+    "storybook": "^10.6.1",
     "tailwindcss": "^4.1.5",
     "ts-jest": "^29.4.14",
     "typescript": "^5",
