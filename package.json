@@ -35,25 +35,25 @@
     "pg": "^8.23.1",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
-    "react-hook-form": "^7.89.0",
+    "react-hook-form": "^7.90.0",
     "yup": "^1.7.1"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
     "@chromatic-com/storybook": "^3.2.6",
     "@eslint/eslintrc": "^3",
-    "@playwright/test": "^1.63.0",
-    "@storybook/addon-essentials": "^8.6.12",
+    "@playwright/test": "^1.64.0",
+    "@storybook/addon-essentials": "^8.6.19",
     "@storybook/addon-onboarding": "^8.6.12",
     "@storybook/blocks": "^8.6.12",
-    "@storybook/experimental-addon-test": "^8.6.12",
-    "@storybook/experimental-nextjs-vite": "^8.6.12",
+    "@storybook/experimental-addon-test": "^8.6.19",
+    "@storybook/experimental-nextjs-vite": "^8.6.19",
     "@storybook/react": "^8.6.12",
-    "@storybook/test": "^8.6.12",
+    "@storybook/test": "^8.6.15",
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.3",
-    "@testing-library/user-event": "^14.6.7",
+    "@testing-library/user-event": "^14.6.8",
     "@types/dotenv": "^8.2.3",
     "@types/node": "^22.20.5",
     "@types/pg": "^8.23.1",
@@ -71,8 +71,8 @@
     "jest": "^30.5.2",
     "lint-staged": "^16.4.0",
     "playwright": "^1.63.0",
-    "postcss": "8.5.28",
-    "prettier": "^3.9.9",
+    "postcss": "8.5.30",
+    "prettier": "^3.9.10",
     "storybook": "^8.6.12",
     "tailwindcss": "^4.1.5",
     "ts-jest": "^29.4.14",
@@ -85,7 +85,7 @@
     ]
   },
   "overrides": {
-    "postcss": "8.5.28"
+    "postcss": "8.5.30"
   },
   "engines": {
     "node": "22.x"
